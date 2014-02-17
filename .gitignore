@@ -1,9 +1,0 @@
-.idea/
-*.iml
-*.iws
-node_modules
-dist
-.tmp
-.sass-cache
-app/vendor
-test/bower_components
