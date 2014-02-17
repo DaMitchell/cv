@@ -1,6 +1,10 @@
 {
   "name": "cv-console",
   "version": "0.0.0",
+  "repository" :{
+      "type" : "git",
+      "url" : "https://github.com/DaMitchell/cv.git"
+  },
   "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.1",
