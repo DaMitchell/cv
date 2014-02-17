@@ -43,13 +43,18 @@ after_success:
     # Any command that using GH_OAUTH_TOKEN must pipe the output to /dev/null to not expose your oauth token
     - git submodule add -b gh-pages https://${GH_OAUTH_TOKEN}@github.com/${GH_OWNER}/${GH_PROJECT_NAME} site > /dev/null 2>&1
     - cd site
+    - pwd
+    - ls -a
     - if git checkout gh-pages; then git checkout -b gh-pages; fi
     - git rm -r .
+    - ls ../dist
     - cp -R ../dist/* .
     - cp ../dist/.* .
+    - ls
     - git add -f .
-    - git config user.email ""
-    - git config user.name ""
+    - git config user.email "danmitchellster@gmail.com"
+    - git config user.name "Dan Mitchell"
+    - git status
     - git commit -am "adding the yeoman build files to gh-pages [ci skip]"
     # Any command that using GH_OAUTH_TOKEN must pipe the output to /dev/null to not expose your oauth token
     - git push https://${GH_OAUTH_TOKEN}@github.com/${GH_OWNER}/${GH_PROJECT_NAME} HEAD:gh-pages > /dev/null 2>&1
