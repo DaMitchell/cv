@@ -203,7 +203,7 @@ input, select
 
 .fade-in
 {
-    opacity:0;
+    /*opacity:0;
     -webkit-animation: fadeIn ease-in 1;
     -moz-animation: fadeIn ease-in 1;
     -o-animation: fadeIn ease-in 1;
@@ -215,5 +215,18 @@ input, select
     -webkit-animation-duration: 0.3s;
     -moz-animation-duration: 0.3s;
     -o-animation-duration: 0.3s;
-    animation-duration: 0.3s;
+    animation-duration: 0.3s;*/
+
+    -webkit-animation: spin 0.3s 1 linear;
+}
+
+@-webkit-keyframes spin {
+    0%  {
+        opacity: 0;
+        -webkit-transform: translate(0, -500px);
+    }
+    100%{
+        opacity: 1;
+        -webkit-transform: translate(0, 0);
+    }
 }
