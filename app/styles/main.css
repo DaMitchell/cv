@@ -203,16 +203,17 @@ input, select
 
 .fade-in
 {
-    opacity:0;  /* make things invisible upon start */
+    opacity:0;
     -webkit-animation: fadeIn ease-in 1;
     -moz-animation: fadeIn ease-in 1;
+    -o-animation: fadeIn ease-in 1;
     animation: fadeIn ease-in 1;
-
     -webkit-animation-fill-mode: forwards;
     -moz-animation-fill-mode: forwards;
+    -o-animation-fill-mode: forwards;
     animation-fill-mode: forwards;
-
     -webkit-animation-duration: 0.3s;
     -moz-animation-duration: 0.3s;
+    -o-animation-duration: 0.3s;
     animation-duration: 0.3s;
 }
