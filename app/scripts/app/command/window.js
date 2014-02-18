@@ -36,6 +36,7 @@ define(['jquery'], function($)
                 case 'full':
                     container.addClass('full');
                     break;
+                default:
                 case 'small':
                     container.addClass('small');
                     break;
