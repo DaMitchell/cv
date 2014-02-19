@@ -116,20 +116,6 @@ input, select
 {
 }
 
-#console.small
-{
-    height: 403px;
-    width: 800px;
-    margin: auto;
-    border: 1px solid #d5d5d5;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    -webkit-box-shadow: 0 8px 6px -6px black;
-    -moz-box-shadow: 0 8px 6px -6px black;
-    box-shadow: 0 8px 6px -6px black;
-}
-
 .console-content,
 #input input
 {
@@ -138,10 +124,7 @@ input, select
     font-size: 12px;
 }
 
-#console.small .console-content
-{
-    margin: 5px;
-}
+
 
 .console-content
 {
@@ -203,30 +186,87 @@ input, select
 
 .fade-in
 {
-    /*opacity:0;
-    -webkit-animation: fadeIn ease-in 1;
-    -moz-animation: fadeIn ease-in 1;
-    -o-animation: fadeIn ease-in 1;
-    animation: fadeIn ease-in 1;
-    -webkit-animation-fill-mode: forwards;
-    -moz-animation-fill-mode: forwards;
-    -o-animation-fill-mode: forwards;
-    animation-fill-mode: forwards;
-    -webkit-animation-duration: 0.3s;
-    -moz-animation-duration: 0.3s;
-    -o-animation-duration: 0.3s;
-    animation-duration: 0.3s;*/
-
     -webkit-animation: spin 0.3s 1 linear;
 }
 
 @-webkit-keyframes spin {
     0%  {
         opacity: 0;
-        -webkit-transform: translate(0, -500px);
     }
     100%{
         opacity: 1;
-        -webkit-transform: translate(0, 0);
+    }
+}
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen
+and (min-device-width : 320px)
+and (max-device-width : 480px) {
+    #console,
+    #console.small
+    #console.full
+    {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        top: 0;
+        right: 0;
+    }
+
+    #console.small .console-content
+    {
+        margin: 0;
+    }
+}
+
+/* Smartphones (landscape) ----------- */
+@media only screen
+and (min-width : 321px) {
+
+}
+
+/* Smartphones (portrait) ----------- */
+@media only screen
+and (max-width : 320px) {
+    #console.small
+    {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        border: none;
+        border-radius: 0;
+        box-shadow: 0 0 0 0;
+    }
+
+    #console.small .console-content
+    {
+        margin: 0;
+    }
+
+    .fade-in
+    {
+        -webkit-animation: none;
+    }
+}
+
+@media only screen
+and (min-width : 800px) {
+
+    #console.small
+    {
+        height: 403px;
+        width: 800px;
+        margin: auto;
+        border: 1px solid #d5d5d5;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        -webkit-box-shadow: 0 8px 6px -6px black;
+        -moz-box-shadow: 0 8px 6px -6px black;
+        box-shadow: 0 8px 6px -6px black;
+    }
+    #console.small .console-content
+    {
+        margin: 5px;
     }
 }

@@ -18,6 +18,11 @@ define(['jquery'], function($)
             return 'clear';
         }
 
+        function getDescription()
+        {
+            return 'Clear the window of all past output.';
+        }
+
         function execute()
         {
             $(consoleApi.config.output).find('.line').remove();
@@ -26,6 +31,7 @@ define(['jquery'], function($)
         return {
             init: init,
             getCommand: getCommand,
+            getDescription: getDescription,
             execute: execute
         };
     };

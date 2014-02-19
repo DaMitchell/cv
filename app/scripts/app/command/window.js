@@ -1,5 +1,5 @@
 /* global define */
-define(['jquery'], function($)
+define(['jquery', 'events'], function($, events)
 {
     'use strict';
 
@@ -29,18 +29,31 @@ define(['jquery'], function($)
                 return;
             }
 
-            container.removeClass('full small');
+            var sizeClass;
 
             switch(size)
             {
                 case 'full':
-                    container.addClass('full');
-                    break;
-                default:
                 case 'small':
-                    container.addClass('small');
+                    sizeClass = size;
                     break;
             }
+
+            if(sizeClass)
+            {
+                container.removeClass('full small').addClass(sizeClass);
+            }
+            else
+            {
+                $(consoleApi).trigger(events.OUTPUT, {
+                    content: 'Sorry "' + size + '" is an invalid size'
+                });
+            }
+        }
+
+        function displayHelp()
+        {
+
         }
 
         return {
