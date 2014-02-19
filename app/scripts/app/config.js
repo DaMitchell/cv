@@ -24,6 +24,7 @@ function(
             new CommandHelp()
         ],
 
+        loading: $('#loading'),
         container: $('#console'),
         input: $('#input'),
         output: $('#output'),

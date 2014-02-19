@@ -29,7 +29,7 @@ define([
 
         function onInputShow()
         {
-            $(config.input).show();
+            $(config.input).show().addClass('fade-in');
             inputElement.focus();
 
             /*inputElement.parent().css({

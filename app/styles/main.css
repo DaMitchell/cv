@@ -1,130 +1,50 @@
-html, body, div, span, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-abbr, address, cite, code,
-del, dfn, em, img, ins, kbd, q, samp,
-small, strong, sub, sup, var,
-b, i,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, figure, footer, header,
-hgroup, menu, nav, section, menu,
-time, mark, audio, video
-{
-    margin: 0;
-    padding: 0;
-    border: 0;
-    outline: 0;
-    font-size: 100%;
-    vertical-align: baseline;
-    background: transparent;
-}
-
-article, aside, figure, footer, header,
-hgroup, nav, section
-{
-    display: block;
-}
-
-nav ul
-{
-    list-style: none;
-}
-
-blockquote, q
-{
-    quotes: none;
-}
-
-blockquote:before, blockquote:after,
-q:before, q:after
-{
-    content: '';
-    content: none;
-}
-
-a
-{
-    margin: 0;
-    padding: 0;
-    font-size: 100%;
-    vertical-align: baseline;
-    background: transparent;
-}
-
-ins
-{
-    background-color: #ff9;
-    color: #000;
-    text-decoration: none;
-}
-
-mark
-{
-    background-color: #ff9;
-    color: #000;
-    font-style: italic;
-    font-weight: bold;
-}
-
-del
-{
-    text-decoration: line-through;
-}
-
-abbr[title], dfn[title]
-{
-    border-bottom: 1px dotted #000;
-    cursor: help;
-}
-
-/* tables still need cellspacing="0" in the markup */
-table
-{
-    border-collapse: collapse;
-    border-spacing: 0;
-}
-
-hr
-{
-    display: block;
-    height: 1px;
-    border: 0;
-    border-top: 1px solid #ccc;
-    margin: 1em 0;
-    padding: 0;
-}
-
-input, select
-{
-    vertical-align: middle;
-}
-
-/* END RESET CSS */
-
-#console,
-.console-content
+.center
 {
     position: absolute;
     bottom: 0;
     left: 0;
     top: 0;
     right: 0;
+    margin: auto;
+}
+
+#loading
+{
+    width: 60px;
+    height: 60px;
+    z-index: 1;
+}
+
+#loading.done
+{
+    display: none;
+}
+
+.loader
+{
+    width: 60px;
+    height: 60px;
+    background-color: #333;
+
+    -webkit-animation: rotateplane 1.2s infinite ease-in-out;
+    -moz-animation: rotateplane 1.2s infinite ease-in-out;
+    -ms-animation: rotateplane 1.2s infinite ease-in-out;
+    -o-animation: rotateplane 1.2s infinite ease-in-out;
+    animation: rotateplane 1.2s infinite ease-in-out;
 }
 
 #console
 {
+    z-index: 101;
 }
 
-.console-content,
-#input input
+#console,
+#console input
 {
     font-family: "Courier New";
     color: #2aff00;
     font-size: 12px;
 }
-
-
 
 .console-content
 {
@@ -186,77 +106,67 @@ input, select
 
 .fade-in
 {
-    -webkit-animation: spin 0.3s 1 linear;
+    -webkit-animation: fade 0.3s 1 linear;
+    -moz-animation: fade 0.3s 1 linear;
+    -ms-animation: fade 0.3s 1 linear;
+    -o-animation: fade 0.3s 1 linear;
+    animation: fade 0.3s 1 linear;
 }
 
-@-webkit-keyframes spin {
+@-webkit-keyframes fade {
     0%  {
         opacity: 0;
+        filter: alpha(opacity=0);
     }
     100%{
         opacity: 1;
+        filter: alpha(opacity=1);
     }
 }
 
-/* Smartphones (portrait and landscape) ----------- */
-@media only screen
-and (min-device-width : 320px)
-and (max-device-width : 480px) {
-    #console,
-    #console.small
-    #console.full
-    {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        top: 0;
-        right: 0;
+@-webkit-keyframes spin{
+    0% {
+        transform: rotate(0deg);
     }
-
-    #console.small .console-content
-    {
-        margin: 0;
+    100% {
+        transform: rotate(360deg);
     }
 }
 
-/* Smartphones (landscape) ----------- */
-@media only screen
-and (min-width : 321px) {
-
+@-webkit-keyframes rotateplane
+{
+    0% {
+        -webkit-transform: perspective(120px)
+    }
+    50% {
+        -webkit-transform: perspective(120px) rotateY(180deg)
+    }
+    100% {
+        -webkit-transform: perspective(120px) rotateY(180deg)  rotateX(180deg)
+    }
 }
 
-/* Smartphones (portrait) ----------- */
-@media only screen
-and (max-width : 320px) {
-    #console.small
-    {
-        height: 100%;
-        width: 100%;
-        margin: 0;
-        border: none;
-        border-radius: 0;
-        box-shadow: 0 0 0 0;
-    }
-
-    #console.small .console-content
-    {
-        margin: 0;
-    }
-
-    .fade-in
-    {
-        -webkit-animation: none;
+@keyframes rotateplane
+{
+    0% {
+        transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+        -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg)
+    } 50% {
+        transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+        -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg)
+    } 100% {
+        transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+        -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
     }
 }
 
 @media only screen
-and (min-width : 800px) {
-
+and (min-width : 800px)
+{
     #console.small
     {
         height: 403px;
         width: 800px;
-        margin: auto;
         border: 1px solid #d5d5d5;
         -webkit-border-radius: 5px;
         -moz-border-radius: 5px;

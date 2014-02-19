@@ -64,6 +64,11 @@ define([
 
     function attachEvents()
     {
+        $(config.container).on('animationend webkitAnimationEnd oanimationend MSAnimationEnd', function()
+        {
+            $(config.loading).addClass('done');
+        });
+
         $(api).off(events.COMMAND_SUBMIT, api.runner.execute).on(events.COMMAND_SUBMIT, api.runner.execute);
     }
 
