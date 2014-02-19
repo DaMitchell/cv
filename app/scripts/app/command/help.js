@@ -33,7 +33,7 @@ define(['jquery', 'events'], function($, events)
                 {content: consoleApi.config.title + ' <span class="white">version</span> <span class="yellow">' + consoleApi.config.version + '</span>'},
                 {},
                 {classes: ['yellow'], content: 'Usage:'},
-                {classes: ['white'], content: '  command [arguments]'},
+                {classes: ['white', 'fade-in'], content: '  command [arguments]'},
                 {},
                 {classes: ['yellow'], content: 'Available commands:'}
             ];
@@ -97,7 +97,7 @@ define(['jquery', 'events'], function($, events)
 
                         $(consoleApi).trigger(events.OUTPUT, {
                             content: line,
-                            classes: ['white']
+                            classes: ['white', 'fade-in']
                         });
                     }
                 }
@@ -107,7 +107,7 @@ define(['jquery', 'events'], function($, events)
 
                     $(consoleApi).trigger(events.OUTPUT, {
                         content: line,
-                        classes: ['white']
+                        classes: ['white', 'fade-in']
                     });
                 }
             }
