@@ -4,9 +4,10 @@ define([
     'config',
     'events',
     'console/runner',
+    'console/tracking',
     'view/input',
-    'view/output',
-], function($, config, events, Runner, ConsoleInput, ConsoleOutput)
+    'view/output'
+], function($, config, events, Runner, Tracking, ConsoleInput, ConsoleOutput)
 {
     'use strict';
 
@@ -18,7 +19,8 @@ define([
             output: null,
             prompt: null
         },
-        runner: null
+        runner: null,
+        tracking: null
     };
 
     function init()
@@ -32,6 +34,7 @@ define([
         api.views.output = new ConsoleOutput(api);
 
         api.runner = new Runner(api);
+        api.tracking = new Tracking(api);
     }
 
     function attachCommands()
@@ -64,7 +67,7 @@ define([
 
     function attachEvents()
     {
-        $(config.container).on('animationend webkitAnimationEnd oanimationend MSAnimationEnd', function()
+        $(config.container).one('animationend webkitAnimationEnd oanimationend MSAnimationEnd', function()
         {
             $(config.loading).addClass('done');
         });
