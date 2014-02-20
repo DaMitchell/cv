@@ -3,13 +3,15 @@ define([
     'jquery',
     'command/help',
     'command/clear',
-    'command/window'
+    'command/window',
+    'command/about'
 ],
 function(
     $,
     CommandWindow,
     CommandClear,
-    CommandHelp
+    CommandHelp,
+    CommandAbout
 )
 {
     'use strict';
@@ -20,8 +22,9 @@ function(
 
         commands: [
             new CommandWindow(),
-            new CommandClear(),
-            new CommandHelp()
+            new CommandHelp(),
+            new CommandAbout(),
+            new CommandClear()
         ],
 
         loading: $('#loading'),

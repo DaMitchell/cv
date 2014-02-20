@@ -18,6 +18,14 @@ define(['jquery', 'events'], function($, events)
             return 'window';
         }
 
+        function getDescription()
+        {
+            return [
+                'Allows you to change the size of the window.',
+                'Will work depending on you screen size.'
+            ];
+        }
+
         function execute(args)
         {
             var container = $(consoleApi.config.container);
@@ -59,6 +67,7 @@ define(['jquery', 'events'], function($, events)
         return {
             init: init,
             getCommand: getCommand,
+            getDescription: getDescription,
             execute: execute
         };
     };

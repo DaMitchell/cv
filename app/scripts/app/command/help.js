@@ -76,7 +76,7 @@ define(['jquery', 'events'], function($, events)
                 commands.push(command);
             }
 
-            for(i = 0, length = commands.length; i < length; i++)
+            for(i = 0; i < commands.length; i++)
             {
                 command = commands[i];
 
@@ -84,7 +84,7 @@ define(['jquery', 'events'], function($, events)
                 {
                     var j;
 
-                    for(j = 0, length = command.description.length; j < length; j++)
+                    for(j = 0; j < command.description.length; j++)
                     {
                         if(j === 0)
                         {

@@ -1,3 +1,15 @@
+html,
+body
+{
+    padding: 0;
+    margin: 0;
+}
+
+a
+{
+    color: inherit;
+}
+
 .center
 {
     position: absolute;
@@ -57,7 +69,7 @@
     min-height: 15px;
     line-height: 15px;
     margin: 0 2px;
-    white-space: pre;
+    white-space: pre-wrap;
 }
 
 .white
@@ -175,8 +187,18 @@ and (min-width : 800px)
         -moz-box-shadow: 0 8px 6px -6px black;
         box-shadow: 0 8px 6px -6px black;
     }
+
     #console.small .console-content
     {
         margin: 5px;
+    }
+}
+
+@media only screen
+and (max-width : 800px)
+{
+    .line
+    {
+        min-width: 600px;
     }
 }
