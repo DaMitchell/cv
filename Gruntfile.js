@@ -273,7 +273,8 @@ module.exports = function (grunt) {
                         'images/{,*/}*.webp',
                         '{,*/}*.html',
                         'styles/fonts/{,*/}*.*',
-                        'vendor/requirejs/require.js'
+                        'vendor/requirejs/require.js',
+                        'data/*.json'
                     ]
                 }]
             },
