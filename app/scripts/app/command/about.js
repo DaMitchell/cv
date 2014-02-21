@@ -41,7 +41,7 @@ define(['jquery', 'events'], function($, events)
                 }
             }
 
-            $.getJSON('/data/about.json').done(onSuccess);
+            $.getJSON('data/about.json').done(onSuccess);
         }
 
         return {
