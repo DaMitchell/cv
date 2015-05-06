@@ -1,6 +1,5 @@
 /* global define */
-define(['jquery'], function($)
-{
+define(['jquery'], function($) {
     /**
      * @type {Array}
      */
@@ -11,23 +10,19 @@ define(['jquery'], function($)
      */
     var currentIndex = 0;
 
-    function resetIndex()
-    {
+    function resetIndex() {
         //currentIndex = -1;
         currentIndex = history.length;
         return this;
     }
 
-    function addHistory(command)
-    {
+    function addHistory(command) {
         history.push(command);
         return this;
     }
 
-    function getNextCommand()
-    {
-        if((currentIndex - 1) < 0)
-        {
+    function getNextCommand() {
+        if ((currentIndex - 1) < 0) {
             return history[currentIndex];
         }
 
@@ -35,8 +30,7 @@ define(['jquery'], function($)
         return history[currentIndex];
     }
 
-    function getPreviousCommand()
-    {
+    function getPreviousCommand() {
         currentIndex++;
         return history[currentIndex];
     }

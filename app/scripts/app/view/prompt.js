@@ -1,10 +1,12 @@
 /* global define */
-define(['jquery', 'config', 'events'], function($, config, events)
-{
+define([
+    'jquery',
+    'config',
+    'events'
+], function($, config, events) {
     'use strict';
 
-    return function(consoleApi)
-    {
+    return function(consoleApi) {
         /**
          * @type {jQuery}
          */
@@ -15,28 +17,26 @@ define(['jquery', 'config', 'events'], function($, config, events)
          * @param {number} size
          * @returns {string}
          */
-        function zeroFill(number, size)
-        {
+        function zeroFill(number, size) {
             number = number.toString();
-            while (number.length < size) number = "0" + number;
+            while (number.length < size) {
+                number = "0" + number;
+            }
             return number;
         }
 
-        function updateTime()
-        {
+        function updateTime() {
             var date = new Date();
-            var time = zeroFill(date.getHours(), 2) + ':' + zeroFill(date.getMinutes(), 2) + ':' + zeroFill(date.getSeconds(), 2) ;
+            var time = zeroFill(date.getHours(), 2) + ':' + zeroFill(date.getMinutes(), 2) + ':' + zeroFill(date.getSeconds(), 2);
 
             promptElement.find('.time').text(time);
         }
 
-        function getPromptText()
-        {
+        function getPromptText() {
             return promptElement.text();
         }
 
-        (function()
-        {
+        (function() {
             promptElement = $(config.input).find('.prompt');
 
             $(consoleApi).on(events.COMMAND_SUBMIT, updateTime);

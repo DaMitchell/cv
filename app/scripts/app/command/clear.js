@@ -1,30 +1,24 @@
 /* global define */
-define(['jquery'], function($)
-{
+define(['jquery'], function($) {
     'use strict';
 
     /** @constructor */
-    return function()
-    {
+    return function() {
         var consoleApi;
 
-        function init(api)
-        {
+        function init(api) {
             consoleApi = api;
         }
 
-        function getCommand()
-        {
+        function getCommand() {
             return 'clear';
         }
 
-        function getDescription()
-        {
+        function getDescription() {
             return 'Clear the window of all past output.';
         }
 
-        function execute()
-        {
+        function execute() {
             $(consoleApi.config.output).find('.line').remove();
         }
 

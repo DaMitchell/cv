@@ -5,12 +5,10 @@ define([
     'events',
     'util/command-history',
     'view/prompt'
-], function($, config, events, commandHistory, ConsolePrompt)
-{
+], function($, config, events, commandHistory, ConsolePrompt) {
     'use strict';
 
-    return function(consoleApi)
-    {
+    return function(consoleApi) {
         /**
          * @type {jQuery}
          */
@@ -27,27 +25,23 @@ define([
 
         var prompt = new ConsolePrompt(consoleApi);
 
-        function onInputShow()
-        {
+        function onInputShow() {
             $(config.input).show().addClass('fade-in');
             inputElement.focus();
 
             /*inputElement.parent().css({
-                paddingLeft: (inputElement.parent().find('#console-prompt').outerWidth() + 7) + 'px'
-            });*/
+             paddingLeft: (inputElement.parent().find('#console-prompt').outerWidth() + 7) + 'px'
+             });*/
         }
 
-        function onInputHide()
-        {
+        function onInputHide() {
             $(config.input).hide();
         }
 
-        function onConsoleInput(e)
-        {
+        function onConsoleKeyDown(e) {
             var pastCommand;
 
-            if (e.keyCode == keys.enter)
-            {
+            if (e.keyCode == keys.enter) {
                 var inputValue = inputElement.val();
                 var inputArguments = inputValue.split(' ');
                 var inputCommand = inputArguments.shift();
@@ -58,8 +52,7 @@ define([
                     args: inputArguments
                 });
 
-                if(inputValue.length)
-                {
+                if (inputValue.length) {
                     commandHistory.addHistory(inputValue);
                 }
 
@@ -67,36 +60,35 @@ define([
 
                 inputElement.val('');
             }
-            else if(e.keyCode == keys.up)
-            {
+            else if (e.keyCode == keys.up) {
                 pastCommand = commandHistory.getNextCommand();
-                inputElement.val(pastCommand === undefined ? '' : pastCommand);
+                inputElement.val(pastCommand === undefined ? '' : pastCommand)
             }
-            else if(e.keyCode == keys.down)
-            {
+            else if (e.keyCode == keys.down) {
                 pastCommand = commandHistory.getPreviousCommand();
-                inputElement.val(pastCommand === undefined ? '' : pastCommand);
+                inputElement.val(pastCommand === undefined ? '' : pastCommand)
             }
         }
 
-        (function()
-        {
+        function onConsoleKeyUp() {
+            inputElement[0].selectionStart = inputElement[0].selectionEnd = inputElement[0].value.length;
+        }
+
+        (function() {
             $(consoleApi).off(events.READY, onInputShow).on(events.READY, onInputShow);
 
             $(consoleApi).off(events.INPUT_SHOW, onInputShow).on(events.INPUT_SHOW, onInputShow);
             $(consoleApi).off(events.INPUT_HIDE, onInputHide).on(events.INPUT_HIDE, onInputHide);
 
             inputElement = $(config.input).find('input');
-            inputElement.off('keydown', onConsoleInput).on('keydown', onConsoleInput);
+            inputElement.off('keydown', onConsoleKeyDown).on('keydown', onConsoleKeyDown);
+            inputElement.off('keyup', onConsoleKeyUp).on('keyup', onConsoleKeyUp);
 
-            $(config.container).click(function()
-            {
+            $(config.container).click(function() {
                 inputElement.focus();
             });
         })();
 
-        return {
-
-        };
+        return {};
     };
 });

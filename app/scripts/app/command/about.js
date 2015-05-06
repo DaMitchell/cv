@@ -1,42 +1,39 @@
 /* global define */
-define(['jquery', 'events'], function($, events)
-{
+define([
+    'jquery',
+    'events'
+], function($, events) {
     'use strict';
 
     /** @constructor */
-    return function()
-    {
+    return function() {
         var consoleApi;
 
-        function init(api)
-        {
+        function init(api) {
             consoleApi = api;
         }
 
-        function getCommand()
-        {
+        function getCommand() {
             return 'about';
         }
 
-        function getDescription()
-        {
+        function getDescription() {
             return 'Information on what this is all about.';
         }
 
-        function execute()
-        {
-            function onError()
-            {
+        function execute() {
+            function onError() {
                 console.log('There was an error.');
             }
 
-            function onSuccess(data)
-            {
-                for(var i = 0; i < data.lines.length; i++)
-                {
+            function onSuccess(data) {
+                for (var i = 0; i < data.lines.length; i++) {
                     $(consoleApi).trigger(events.OUTPUT, {
                         content: data.lines[i],
-                        classes: ['white', 'fade-in']
+                        classes: [
+                            'white',
+                            'fade-in'
+                        ]
                     });
                 }
             }

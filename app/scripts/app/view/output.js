@@ -1,10 +1,12 @@
 /* global define */
-define(['jquery', 'config', 'events'], function($, config, events)
-{
+define([
+    'jquery',
+    'config',
+    'events'
+], function($, config, events) {
     'use strict';
 
-    return function(consoleApi)
-    {
+    return function(consoleApi) {
         /**
          * @type {jQuery}
          */
@@ -15,12 +17,10 @@ define(['jquery', 'config', 'events'], function($, config, events)
          */
         var contentElement;
 
-        function addOutputLine(text, classes)
-        {
+        function addOutputLine(text, classes) {
             var lineClasses = ['line'];
 
-            if(classes !== undefined && $.isArray(classes))
-            {
+            if (classes !== undefined && $.isArray(classes)) {
                 lineClasses = lineClasses.concat(classes);
             }
 
@@ -31,20 +31,16 @@ define(['jquery', 'config', 'events'], function($, config, events)
             contentElement.scrollTop(contentElement[0].scrollHeight);
         }
 
-        function onCommandSubmit(e, data)
-        {
+        function onCommandSubmit(e, data) {
             addOutputLine(data.prompt + ' ' + data.command + ' ' + data.args.join(' '));
         }
 
-        function onOutput(e, data)
-        {
+        function onOutput(e, data) {
             addOutputLine(data.content, data.classes);
         }
 
-        function linkify(string)
-        {
-            if(string === undefined)
-            {
+        function linkify(string) {
+            if (string === undefined) {
                 return "";
             }
 
@@ -63,16 +59,14 @@ define(['jquery', 'config', 'events'], function($, config, events)
                 .replace(emailAddressPattern, '<a href="mailto:$&">$&</a>');
         }
 
-        (function()
-        {
+        (function() {
             outputElement = $(config.output);
             contentElement = $(config.container).find('.console-content');
 
             $(consoleApi).on(events.COMMAND_SUBMIT, onCommandSubmit);
             $(consoleApi).on(events.OUTPUT, onOutput)
 
-            for(var i = 0, length = config.initOutput.length; i < length; i++)
-            {
+            for (var i = 0, length = config.initOutput.length; i < length; i++) {
                 addOutputLine(config.initOutput[i], ['fade-in']);
             }
         })();
