@@ -4,14 +4,18 @@ define([
     'command/help',
     'command/clear',
     'command/window',
-    'command/about'
+    'command/about',
+    'command/spin',
+    'command/panel'
 ],
 function(
     $,
     CommandWindow,
     CommandClear,
     CommandHelp,
-    CommandAbout
+    CommandAbout,
+    CommandSpin,
+    CommandPanel
 )
 {
     'use strict';
@@ -24,7 +28,9 @@ function(
             new CommandWindow(),
             new CommandHelp(),
             new CommandAbout(),
-            new CommandClear()
+            new CommandClear(),
+            new CommandSpin(),
+            new CommandPanel()
         ],
 
         loading: $('#loading'),

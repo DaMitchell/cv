@@ -12,6 +12,7 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/side-panel.css">
     <!-- endbuild -->
 
     <script>
@@ -37,6 +38,22 @@
             <span id="console-prompt" class="prompt">user@cv [<span class="time">--:--:--</span>]&gt;</span>
             <input type="text" id="input-command" maxlength="90"/>
         </div>
+    </div>
+</div>
+
+<div id="side-panel">
+    <div class="buttons">
+        <a class="button" href="#" data-tab="a">A</a>
+        <a class="button" href="#" data-tab="b">B</a>
+        <a class="button" href="#" data-tab="c">C</a>
+        <a class="button" href="#" data-tab="d">D</a>
+        <a class="button close" href="#">&gt;&gt;</a>
+    </div>
+    <div class="content">
+        <div class="a">panel A</div>
+        <div class="b">panel B</div>
+        <div class="c">panel C</div>
+        <div class="d">panel D</div>
     </div>
 </div>
 

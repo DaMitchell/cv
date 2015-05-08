@@ -35,6 +35,8 @@ define([
 
         api.runner = new Runner(api);
         api.tracking = new Tracking(api);
+
+        require(['panel/panel']);
     }
 
     function attachCommands()
