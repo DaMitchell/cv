@@ -1,9 +1,7 @@
 {
-    "name": "cv-console",
-    "private": true,
-    "dependencies": {
-        "jquery": "2.1.0",
-        "requirejs": "2.1.10"
-    },
-    "devDependencies": {}
+  "name": "cv",
+  "private": true,
+  "dependencies": {
+    "jquery": "~2.1.1"
+  }
 }
