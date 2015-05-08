@@ -2,6 +2,7 @@
   "name": "cv",
   "private": true,
   "dependencies": {
-    "jquery": "~2.1.1"
+    "jquery": "~2.1.1",
+    "loader.js": "~3.2.1"
   }
 }
