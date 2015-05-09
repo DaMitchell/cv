@@ -6,6 +6,8 @@ var $ = require('gulp-load-plugins')();
 var browserSync = require('browser-sync');
 var reload = browserSync.reload;
 
+var deploy = require('gulp-gh-pages');
+
 gulp.task('styles', function() {
     return gulp.src('app/styles/main.scss')
         //.pipe($.sourcemaps.init())
@@ -32,7 +34,7 @@ gulp.task('scripts', ['jshint'], function() {
             formatter: require('es6-module-transpiler-amd-formatter'),
             basePath: 'app/scripts'
         }))
-        .pipe($.concat('main.js'))
+        .pipe($.concat('app.js'))
         .pipe($.sourcemaps.write('./'))
         .pipe(gulp.dest('.tmp/scripts'))
         .pipe(reload({stream: true}));
@@ -52,6 +54,9 @@ gulp.task('html', ['scripts', 'styles'], function() {
     return gulp.src('app/*.html')
         .pipe(assets)
         .pipe($.if('*.js', $.uglify()))
+        .on('error', function(err) {
+            console.log(err);
+        })
         .pipe($.if('*.css', $.csso()))
         .pipe(assets.restore())
         .pipe($.useref())
@@ -134,6 +139,11 @@ gulp.task('wiredep', function() {
 
 gulp.task('build', ['html', 'images', 'fonts', 'extras'], function() {
     return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
+});
+
+gulp.task('deploy', ['build'], function () {
+    return gulp.src("./dist/**/*")
+        .pipe(deploy())
 });
 
 gulp.task('default', ['clean'], function() {

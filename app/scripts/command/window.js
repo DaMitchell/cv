@@ -1,5 +1,7 @@
 'use strict';
 
+import Events from 'events';
+
 export default function() {
     var api;
 
@@ -39,14 +41,10 @@ export default function() {
         if (sizeClass) {
             container.removeClass('full small').addClass(sizeClass);
         } else {
-            $(api).trigger(events.OUTPUT, {
+            $(api).trigger(Events.OUTPUT, {
                 content: 'Sorry "' + size + '" is an invalid size'
             });
         }
-    }
-
-    function displayHelp() {
-
     }
 
     return {
@@ -55,4 +53,4 @@ export default function() {
         getDescription: getDescription,
         execute: execute
     };
-};
+}
