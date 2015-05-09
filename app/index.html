@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>test gulp</title>
+    <title>Interactive CV</title>
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
     <!-- build:css styles/vendor.css -->
@@ -18,19 +18,37 @@
 
 </head>
 <body>
-    <!--[if lt IE 10]>
-    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
-        your browser</a> to improve your experience.</p>
-    <![endif]-->
 
-    <div class="hero-unit">
-        <h1>'Allo, 'Allo!</h1>
+    <div id="console" class="center fade-in">
+        <header>
+            <div class="buttons">
+                <div class="btn red"></div>
+                <div class="btn yellow"></div>
+                <div class="btn green"></div>
+            </div>
 
-        <p>You now have</p>
-        <ul>
-            <li>HTML5 Boilerplate</li>
-            <li>Sass</li>
-        </ul>
+            Interactive Console CV
+        </header>
+        <div class="console-content">
+            <div id="output" class="output">
+                <div class="line">Some test text</div>
+                <div class="line">Some telkjlkjl</div>
+                <div class="line">Some test text</div>
+                <div class="line">Some test text</div>
+                <div class="line">Some test text</div>
+                <div class="line">Some test text</div>
+                <div class="line">Some test text</div>
+                <div class="line">Some test text</div>
+                <div class="line">Some test text</div>
+                <div class="line">Some test text</div>
+                <div class="line">Some telkjlkjl</div>
+            </div>
+            <div id="input">
+                <span id="console-prompt" class="prompt">user@cv [<span class="time">--:--:--</span>]&gt;</span>
+                <input type="text" id="input-command" maxlength="90"/>
+            </div>
+        </div>
+        <footer></footer>
     </div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->

@@ -1,0 +1,32 @@
+#input {
+    position: relative;
+    padding: 0 10px 0 142px;
+    display: none;
+
+    line-height: $console-line-height;
+
+    input,
+    .prompt {
+        display: block;
+    }
+
+    input {
+        width: 100%;
+        padding: 0;
+        margin: 0;
+
+        border: none;
+        background: $console-color-background;
+
+        outline: none;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        cursor: default;
+    }
+
+    .prompt {
+        position: absolute;
+        left: 0;
+    }
+}

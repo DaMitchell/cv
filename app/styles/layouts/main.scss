@@ -1,0 +1,91 @@
+#console {
+    z-index: 101;
+    overflow: hidden;
+
+    @include center();
+
+    @include breakpoint(tablet) {
+        height: $console-height;
+        width: $console-width;
+
+        -webkit-border-radius: $console-border-radius;
+        -moz-border-radius: $console-border-radius;
+        border-radius: $console-border-radius;
+
+        -webkit-box-shadow: 0 0 40px 0 #000;
+        -moz-box-shadow: 0 0 40px 0 #000;
+        box-shadow: 0 0 40px 0 #000;
+    }
+
+    header {
+        position: relative;
+
+        line-height: $console-header-height;
+        background-color: $console-header-background;
+
+        text-align: center;
+        color: $console-header-color;
+
+        .buttons {
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            height: $console-header-height;
+
+            @include clearfix();
+
+            .btn {
+
+                width: $console-header-btn-radius * 2;
+                height: $console-header-btn-radius * 2;
+                margin: 5px 0 5px 5px;
+
+                -webkit-border-radius: $console-header-btn-radius;
+                -moz-border-radius: $console-header-btn-radius;
+                border-radius: $console-header-btn-radius;
+
+                border: 1px solid #000;
+
+                background-color: white;
+
+                float: left;
+
+                &.red {
+                    background-color: #fd5f58;
+                    border: 1px solid #f64f46;
+                }
+
+                &.yellow {
+                    background-color: #ffbe2f;
+                    border: 1px solid #f6b31e;
+                }
+
+                &.green {
+                    background-color: #2acb41;
+                    border: 1px solid #23c633;
+                }
+            }
+        }
+    }
+
+    .console-content {
+        @include center($console-header-height);
+
+        padding: 2px 3px;
+
+        background-color: $console-color-background;
+        color: $console-color-foreground;
+        overflow: auto;
+
+        &::selection {
+            background: $console-color-selection;
+            color: $console-color-selection-text;
+        }
+
+        &::-moz-selection {
+            background: $console-color-selection;
+            color: $console-color-selection-text;
+        }
+    }
+}

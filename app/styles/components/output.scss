@@ -1,0 +1,59 @@
+.line {
+    min-height: $console-line-height;
+    line-height: $console-line-height;
+    white-space: pre-wrap;
+
+    &::selection {
+        background: $console-color-selection;
+        color: $console-color-selection-text;
+    }
+
+    &::-moz-selection {
+        background: $console-color-selection;
+        color: $console-color-selection-text;
+    }
+
+    @include breakpoint(tablet) {
+        min-width: 600px;
+    }
+
+    .black {
+        color: $console-color-black;
+    }
+
+    .red {
+        color: $console-color-red;
+    }
+
+    .green {
+        color: $console-color-green;
+    }
+
+    .yellow {
+        color: $console-color-yellow;
+    }
+
+    .blue {
+        color: $console-color-blue;
+    }
+
+    .magenta {
+        color: $console-color-magenta;
+    }
+
+    .cyan {
+        color: $console-color-cyan;
+    }
+
+    .white {
+        color: $console-color-white;
+    }
+}
+
+.white {
+    color: white;
+}
+
+.yellow {
+    color: yellow;
+}
