@@ -32,7 +32,7 @@ gulp.task('scripts', ['jshint'], function() {
             formatter: require('es6-module-transpiler-amd-formatter'),
             basePath: 'app/scripts'
         }))
-        .pipe($.concat('all.js'))
+        .pipe($.concat('main.js'))
         .pipe($.sourcemaps.write('./'))
         .pipe(gulp.dest('.tmp/scripts'))
         .pipe(reload({stream: true}));

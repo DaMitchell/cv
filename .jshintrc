@@ -1,4 +1,7 @@
 {
+  "globals": {
+    "ga": true
+  },
   "browser": true,
   "node": true,
   "esnext": true,
