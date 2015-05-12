@@ -108,7 +108,6 @@ export default function() {
         });
 
         if (command && typeof(command.getHelp) === 'function') {
-            lines = [];
             lines = $.makeArray(command.getHelp()).map(function(line) {
                 if(_.isString(line)) {
                     line = {
