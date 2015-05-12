@@ -1,6 +1,7 @@
 'use strict';
 
 import Events from 'events';
+import transitionEvent from 'util/transition-event';
 
 export default function() {
     var api;
@@ -34,11 +35,11 @@ export default function() {
     }
 
     function execute(args) {
+        var deferred = $.Deferred();
         var container = $(api.config.container);
         var size = args[0];
 
-        if ((size === 'full' && container.hasClass('full')) ||
-            (size === 'small' && container.hasClass('small'))) {
+        if (container.hasClass(size)) {
             return;
         }
 
@@ -52,12 +53,23 @@ export default function() {
         }
 
         if (sizeClass) {
+            var transition = transitionEvent();
+
+            if(transition) {
+                container.one(transitionEvent(), function(){
+                    console.log('window transition fin');
+                    deferred.resolve();
+                });
+            }
+
             container.removeClass('min max').addClass(sizeClass);
-        } else {
-            $(api).trigger(Events.OUTPUT, {
-                content: 'Sorry "' + size + '" is an invalid size'
-            });
+
+            return transition ? deferred.promise() : deferred.resolve();
         }
+
+        $(api).trigger(Events.OUTPUT, {
+            content: 'Sorry "' + size + '" is an invalid size'
+        });
     }
 
     return {
