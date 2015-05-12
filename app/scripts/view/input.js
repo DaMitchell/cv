@@ -65,8 +65,10 @@ export default function(api) {
         }
     }
 
-    function onConsoleKeyUp() {
-        inputElement[0].selectionStart = inputElement[0].selectionEnd = inputElement[0].value.length;
+    function onConsoleKeyUp(e) {
+        if ((e.keyCode === keys.up) || (e.keyCode === keys.down)) {
+            inputElement[0].selectionStart = inputElement[0].selectionEnd = inputElement[0].value.length;
+        }
     }
 
     $(api).off(Events.READY, onInputShow).on(Events.READY, onInputShow);
