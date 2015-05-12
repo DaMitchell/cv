@@ -31,16 +31,16 @@ function initDependencies(api) {
 function attachAndInitCommands(api) {
     var config = api.config;
 
-    if (config.commands && $.isArray(config.commands)) {
-        for (var i = 0, l = config.commands.length; l > i; i++) {
-            if (typeof(config.commands[i]) === 'object') {
-                api.commands.push(config.commands[i]);
+    if (config.commands && _.isArray(config.commands)) {
+        config.commands.map(function(command, i){
+            if (typeof(command) === 'object') {
+                api.commands.push(command);
 
                 if (typeof(api.commands[i].init) === 'function') {
                     api.commands[i].init(api);
                 }
             }
-        }
+        });
     }
 }
 
@@ -49,8 +49,8 @@ export default function(config) {
 
     api.config = $.extend({}, api.config, config || {});
 
-    initDependencies(api);
     attachAndInitCommands(api);
+    initDependencies(api);
 
     $(api).trigger(Events.READY);
 

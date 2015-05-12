@@ -1,5 +1,5 @@
 .line {
-    min-height: $console-line-height;
+    min-height: $console-font-size * $console-line-height;
     line-height: $console-line-height;
     white-space: pre-wrap;
 

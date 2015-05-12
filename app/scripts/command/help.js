@@ -15,93 +15,113 @@ export default function() {
 
     function getDescription() {
         return [
-            'This is the help commands description',
-            'It is a multi-line example of a description',
-            'Just a 3rd one for example'
+            'Display help information'
         ];
     }
 
-    function execute() {
+    function execute(args) {
         var lines = [
             {content: api.config.title + ' <span class="white">version</span> <span class="yellow">' + api.config.version + '</span>'},
-            {},
-            {classes: ['yellow'], content: 'Usage:'},
-            {classes: [
-                'white',
-                'fade-in'
-            ], content: '  command [arguments]'},
+            {}
+        ];
+
+        if (!args.length) {
+            lines = lines.concat(showAll());
+        } else {
+            lines = lines.concat(showHelpForCommand(args));
+        }
+
+        lines.map(function(line) {
+            $(api).trigger(Events.OUTPUT, line);
+        });
+    }
+
+    function showAll() {
+        var lines = [
+            {content: 'Usage:', classes: ['yellow']},
+            {content: '  command [arguments]', classes: ['fade-in']},
             {},
             {classes: ['yellow'], content: 'Available commands:'}
         ];
 
-        var i, length;
-
-        for (i = 0, length = lines.length; i < length; i++) {
-            $(api).trigger(Events.OUTPUT, lines[i]);
-        }
-
-        renderCommands();
+        return lines.concat(renderCommands(), [
+            {},
+            {content: 'See \'help &lt;command&gt;\' for more information on a specific command.'},
+            {}
+        ]);
     }
 
     function renderCommands() {
-        var commands = [];
         var longest = 0;
-        var i, length, commandObj, command, line;
+        var lines = [];
+        var line, name;
 
-        for (i = 0, length = api.commands.length; i < length; i++) {
-            commandObj = api.commands[i];
-
-            if (typeof(commandObj.getCommand) !== 'function') {
-                continue;
+        var commands = api.commands.map(function(command) {
+            if (typeof(command.getCommand) !== 'function') {
+                return false;
             }
 
-            command = {
-                name: commandObj.getCommand(),
-                description: typeof(commandObj.getDescription) === 'function' ? commandObj.getDescription() : ''
+            name = command.getCommand();
+
+            if (name.length > longest) {
+                longest = name.length;
+            }
+
+            return {
+                name: name,
+                description: typeof(command.getDescription) === 'function' ? command.getDescription() : ''
             };
+        });
 
-            if (command.name.length > longest) {
-                longest = command.name.length;
-            }
-
-            commands.push(command);
-        }
-
-        for (i = 0; i < commands.length; i++) {
-            command = commands[i];
-
-            if ($.isArray(command.description)) {
-                var j;
-
-                for (j = 0; j < command.description.length; j++) {
-                    if (j === 0) {
-                        line = '  ' + command.name + spacePadding(command.description[j], ((longest - command.name.length) + 4));
-                    }
-                    else {
-                        line = '  ' + spacePadding(command.description[j], (longest + 4));
-                    }
-
-                    $(api).trigger(Events.OUTPUT, {
-                        content: line,
-                        classes: [
-                            'white',
-                            'fade-in'
-                        ]
-                    });
+        commands.map(function(command) {
+            $.makeArray(command.description).map(function(descriptionLine, idx) {
+                if (idx === 0) {
+                    line = '  ' + command.name + spacePadding(descriptionLine, ((longest - command.name.length) + 4));
+                } else {
+                    line = '  ' + spacePadding(descriptionLine, (longest + 4));
                 }
-            }
-            else {
-                line = '  ' + command.name + spacePadding(command.description, ((longest - command.name.length) + 4));
 
-                $(api).trigger(Events.OUTPUT, {
+                 lines.push({
                     content: line,
                     classes: [
                         'white',
                         'fade-in'
                     ]
                 });
-            }
+            });
+        });
+
+        return lines;
+    }
+
+    function showHelpForCommand(args) {
+        var lines = [{
+            content: 'There isn\'t any extra help for this command',
+            classes: [
+                'blue',
+                'fade-in'
+            ]
+        }];
+
+        var command = _.find(api.commands, function(command) {
+            return command.getCommand() === args[0];
+        });
+
+        if (command && typeof(command.getHelp) === 'function') {
+            lines = [];
+            lines = $.makeArray(command.getHelp()).map(function(line) {
+                if(_.isString(line)) {
+                    line = {
+                        content: line,
+                        classes: ['fade-in']
+                    };
+                }
+
+                return line;
+            });
         }
+
+        return lines;
     }
 
     function spacePadding(string, amount) {

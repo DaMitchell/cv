@@ -21,7 +21,7 @@
         box-shadow: 0 0 40px 0 #000;
     }
 
-    &.full {
+    &.max {
         height: 100%;
         width: 100%;
 
@@ -30,7 +30,7 @@
         border-radius: 0;
     }
 
-    &.small {
+    &.min {
         @include breakpoint(tablet) {
             height: $console-height;
             width: $console-width;
@@ -94,7 +94,7 @@
     }
 
     .console-content {
-        @include center($console-header-height);
+        @include center();
 
         padding: 2px 3px;
 

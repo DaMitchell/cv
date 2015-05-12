@@ -1,6 +1,7 @@
 {
   "globals": {
-    "ga": true
+    "ga": true,
+    "_": true
   },
   "browser": true,
   "node": true,

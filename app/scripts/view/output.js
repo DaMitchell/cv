@@ -39,6 +39,11 @@ export default function(api) {
         addOutputLine(message, ['red']);
     }
 
+    function onCommandComplete() {
+        console.log('command complete');
+        $('.nano').nanoScroller();
+    }
+
     function onOutput(e, data) {
         addOutputLine(data.content, data.classes);
     }
@@ -70,12 +75,15 @@ export default function(api) {
     $(api).on(Events.COMMAND_NOT_FOUND, onCommandNotFound);
     $(api).on(Events.COMMAND_ERROR, onCommandError);
     $(api).on(Events.COMMAND_SUBMIT, onCommandSubmit);
+    $(api).on(Events.COMMAND_COMPLETE, onCommandComplete);
     $(api).on(Events.OUTPUT_CLEAR, onOutputClear);
     $(api).on(Events.OUTPUT, onOutput);
 
     for (var i = 0, length = api.config.initOutput.length; i < length; i++) {
         addOutputLine(api.config.initOutput[i], ['fade-in']);
     }
+
+    $('.nano').nanoScroller();
 
     return {
         addOutputLine: addOutputLine
