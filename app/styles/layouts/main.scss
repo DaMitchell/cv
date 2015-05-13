@@ -102,14 +102,16 @@
         color: $console-color-foreground;
         overflow: auto;
 
-        &::selection {
-            background: $console-color-selection;
-            color: $console-color-selection-text;
-        }
+        * {
+            &::selection {
+                background: $console-color-selection;
+                color: $console-color-selection-text;
+            }
 
-        &::-moz-selection {
-            background: $console-color-selection;
-            color: $console-color-selection-text;
+            &::-moz-selection {
+                background: $console-color-selection;
+                color: $console-color-selection-text;
+            }
         }
     }
 }

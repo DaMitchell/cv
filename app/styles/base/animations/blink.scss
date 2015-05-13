@@ -1,0 +1,43 @@
+@keyframes blink {
+    0%, 100% {
+        background-color: $console-color-background;
+        color: $console-color-foreground;
+    }
+    50% {
+        background-color: $console-color-foreground;
+        color: $console-color-background;
+    }
+}
+
+@-webkit-keyframes blink {
+    0%, 100% {
+        background-color: $console-color-background;
+        color: $console-color-foreground;
+    }
+    50% {
+        background-color: $console-color-foreground;
+        color: $console-color-background;
+    }
+}
+
+@-ms-keyframes blink {
+    0%, 100% {
+        background-color: $console-color-background;
+        color: $console-color-foreground;
+    }
+    50% {
+        background-color: $console-color-foreground;
+        color: $console-color-background;
+    }
+}
+
+@-moz-keyframes blink {
+    0%, 100% {
+        background-color: $console-color-background;
+        color: $console-color-foreground;
+    }
+    50% {
+        background-color: $console-color-foreground;
+        color: $console-color-background;
+    }
+}

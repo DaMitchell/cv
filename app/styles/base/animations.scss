@@ -1,0 +1,18 @@
+@import "animations/blink";
+@import "animations/fade-in";
+
+.fade-in {
+    -webkit-animation: fade 0.3s 1 linear;
+    -moz-animation: fade 0.3s 1 linear;
+    -ms-animation: fade 0.3s 1 linear;
+    -o-animation: fade 0.3s 1 linear;
+    animation: fade 0.3s 1 linear;
+}
+
+.blink {
+    -webkit-animation: blink 1s infinite steps(1, start);
+    -moz-animation: blink 1s infinite steps(1, start);
+    -ms-animation: blink 1s infinite steps(1, start);
+    -o-animation: blink 1s infinite steps(1, start);
+    animation: blink 1s infinite steps(1, start);
+}

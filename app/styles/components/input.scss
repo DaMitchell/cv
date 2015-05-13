@@ -1,13 +1,15 @@
 #input {
     position: relative;
-    padding: 0 0 0 144px;
+    //padding: 0 0 0 144px;
     display: none;
 
     line-height: $console-line-height;
     height: $console-font-size * $console-line-height;
 
-    input,
-    .prompt {
+    font-size: 0;
+
+    input/*,
+    .prompt*/ {
         line-height: $console-line-height;
         display: block;
     }
@@ -24,8 +26,25 @@
         cursor: default;
     }
 
+    > span {
+        font-size: $console-font-size;
+    }
+
     .prompt {
-        position: absolute;
-        left: 0;
+        //position: absolute;
+        //left: 0;
+    }
+
+    .input {
+        font-size: 0;
+
+        > * {
+            font-size: $console-font-size;
+        }
+
+        .cursor.enable{
+            background-color: $console-color-selection;
+            color: $console-color-selection-text;
+        }
     }
 }

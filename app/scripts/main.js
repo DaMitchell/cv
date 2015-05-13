@@ -5,7 +5,7 @@ import Config from 'config';
 
 import Runner from 'core/runner';
 import Tracking from 'core/tracking';
-import Input from 'view/input';
+import Input from 'view/custom-input';
 import Output from 'view/output';
 
 var api = {

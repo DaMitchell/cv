@@ -1,8 +1,10 @@
 'use strict';
 
 export default {
-    INIT_OUTPUT: 'cv.console.init.output',
     READY: 'cv.console.ready',
+
+    ENABLE: 'cv.console.enable',
+    DISABLE: 'cv.console.disable',
 
     INPUT_SHOW: 'cv.console.input.show',
     INPUT_HIDE: 'cv.console.input.hide',
