@@ -24,7 +24,7 @@ export default {
     output: $('#output'),
 
     initOutput: [
-        'Type help to get a list of commands',
+        'Type "help" to get a list of commands',
         ' '
     ]
 };
