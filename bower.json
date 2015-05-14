@@ -5,6 +5,7 @@
     "jquery": "~2.1.1",
     "loader.js": "~3.2.1",
     "underscore": "~1.8.3",
-    "nanoscroller": "~0.8.7"
+    "nanoscroller": "~0.8.7",
+    "Keypress": "~2.1.0"
   }
 }

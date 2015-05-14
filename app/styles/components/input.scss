@@ -1,38 +1,11 @@
 #input {
-    position: relative;
-    //padding: 0 0 0 144px;
     display: none;
-
     line-height: $console-line-height;
-    height: $console-font-size * $console-line-height;
 
     font-size: 0;
 
-    input/*,
-    .prompt*/ {
-        line-height: $console-line-height;
-        display: block;
-    }
-
-    input {
-        width: 100%;
-        padding: 0;
-        margin: 0;
-
-        border: none;
-        background: $console-color-background;
-
-        outline: none;
-        cursor: default;
-    }
-
     > span {
         font-size: $console-font-size;
-    }
-
-    .prompt {
-        //position: absolute;
-        //left: 0;
     }
 
     .input {
@@ -40,11 +13,20 @@
 
         > * {
             font-size: $console-font-size;
+            white-space: pre;
+            word-break: break-all;
+            word-wrap: break-word;
         }
 
-        .cursor.enable{
+        .cursor.enable {
             background-color: $console-color-selection;
             color: $console-color-selection-text;
         }
+    }
+
+    .clipboard {
+        overflow: hidden;
+        height: 0;
+        outline: 0;
     }
 }

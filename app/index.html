@@ -9,11 +9,6 @@
 
     <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
 
-    <!-- build:css styles/vendor.css -->
-    <!-- bower:css -->
-    <!-- endbower -->
-    <!-- endbuild -->
-
     <!-- build:css styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
@@ -35,10 +30,11 @@
             <div class="console-content nano-content">
                 <div id="output" class="output"></div>
                 <div id="input">
-                    <span id="console-prompt" class="prompt">user@cv [<span class="time">--:--:--</span>]&gt;&nbsp;</span>
+                    <span class="prompt">user@cv [<span class="time">--:--:--</span>]&gt;&nbsp;</span>
                     <span class="input">
                         <span></span><span class="cursor">&nbsp;</span><span></span>
                     </span>
+                    <div class="clipboard"><textarea class="clipboard-input"></textarea></div>
                 </div>
             </div>
         </div>
@@ -61,6 +57,7 @@
     <script src="/bower_components/loader.js/loader.js"></script>
     <script src="/bower_components/underscore/underscore.js"></script>
     <script src="/bower_components/nanoscroller/bin/javascripts/jquery.nanoscroller.js"></script>
+    <script src="/bower_components/Keypress/keypress-2.1.0.min.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 

@@ -37,7 +37,7 @@ export default function(api) {
      * @returns {string}
      */
     function getPromptText() {
-        return promptElement.text();
+        return $.trim(promptElement.text());
     }
 
     $(api).on(Events.COMMAND_SUBMIT, updateTime);

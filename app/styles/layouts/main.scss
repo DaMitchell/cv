@@ -101,6 +101,7 @@
         background-color: $console-color-background;
         color: $console-color-foreground;
         overflow: auto;
+        outline: 0;
 
         * {
             &::selection {
