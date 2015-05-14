@@ -4,7 +4,6 @@
 import Events from 'events';
 import Prompt from 'view/prompt';
 import commandHistory from 'util/command-history';
-//import transitionEvent from 'util/transition-event';
 
 export default function(api) {
 
@@ -24,7 +23,7 @@ export default function(api) {
     /**
      * @type {string}
      */
-    var commandInput = '';//'test command';
+    var commandInput = '';
 
     /**
      * @type {number}
@@ -51,11 +50,11 @@ export default function(api) {
         var beforeElement = cursorElement.prev();
         var afterElement = cursorElement.next();
 
-        if(cursorPosition === commandInput.length) {
+        if (cursorPosition === commandInput.length) {
             beforeElement.text(commandInput);
             cursorElement.html('&nbsp;');
             afterElement.text('');
-        } else if(cursorPosition === 0) {
+        } else if (cursorPosition === 0) {
             beforeElement.text('');
             cursorElement.text(commandInput.slice(0, 1));
             afterElement.text(commandInput.slice(1));
@@ -63,7 +62,7 @@ export default function(api) {
             beforeElement.text(commandInput.slice(0, cursorPosition));
             cursorElement.text(commandInput.slice(cursorPosition, cursorPosition + 1));
 
-            if(cursorPosition === commandInput.length - 1) {
+            if (cursorPosition === commandInput.length - 1) {
                 afterElement.text('');
             } else {
                 afterElement.text(commandInput.slice(cursorPosition + 1));
@@ -110,9 +109,9 @@ export default function(api) {
     function cursorMove(e) {
         var keyCode = e.which;
 
-        if(keyCode === keys.left) {
+        if (keyCode === keys.left) {
             cursorPosition = (cursorPosition - 1) < 0 ? 0 : cursorPosition - 1;
-        } else if(keyCode === keys.right) {
+        } else if (keyCode === keys.right) {
             cursorPosition = (cursorPosition + 1) > commandInput.length ? commandInput.length : cursorPosition + 1;
         }
 
@@ -161,7 +160,7 @@ export default function(api) {
     }
 
     function onKeyPress(e) {
-        if(!e.ctrlKey && !e.altKey && $.inArray(e.which, [91, 93]) < 0) {
+        if (!e.ctrlKey && !e.altKey && $.inArray(e.which, [91, 93]) < 0) {
             updateCommand(String.fromCharCode(e.which));
         }
     }
@@ -175,16 +174,16 @@ export default function(api) {
     function enable() {
         cursorElement.addClass('enable');
         $(document).off('keypress', onKeyPress).on('keypress', onKeyPress);
-        //$(document).off('keydown', onKeyDown).on('keydown', onKeyDown);
     }
 
     function disable() {
-        //$(document).off('keydown', onKeyDown);
         $(document).off('keypress', onKeyPress);
         cursorElement.removeClass('enable');
     }
 
-    listener.simple_combo('tab', function() {return false;});
+    listener.simple_combo('tab', function() {
+        return false;
+    });
 
     listener.simple_combo('enter', fireCommand);
     listener.simple_combo('left', cursorMove);
@@ -205,7 +204,7 @@ export default function(api) {
     $(api).off(Events.READY, onReady).on(Events.READY, onReady);
 
     $(document).on('click.console', function(e) {
-        if(!$(e.target).closest('#console').hasClass('console')) {
+        if (!$(e.target).closest('#console').hasClass('console')) {
             disable();
         }
     });
