@@ -3,7 +3,7 @@
 /**
  * @type {string[]}
  */
-var histtoryArray = [];
+var historyArray = [];
 
 /**
  * @type {Number}
@@ -11,25 +11,25 @@ var histtoryArray = [];
 var currentIndex = 0;
 
 function resetIndex() {
-    currentIndex = histtoryArray.length;
+    currentIndex = historyArray.length;
 }
 
 function addHistory(command) {
-    histtoryArray.push(command);
+    historyArray.push(command);
 }
 
 function getNextCommand() {
     if ((currentIndex - 1) < 0) {
-        return histtoryArray[currentIndex];
+        return historyArray[currentIndex];
     }
 
     currentIndex--;
-    return histtoryArray[currentIndex];
+    return historyArray[currentIndex];
 }
 
 function getPreviousCommand() {
     currentIndex++;
-    return histtoryArray[currentIndex];
+    return historyArray[currentIndex];
 }
 
 export default {

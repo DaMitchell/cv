@@ -3,7 +3,7 @@
 
 import Events from 'events';
 import Prompt from 'view/prompt';
-import commandHistory from 'util/command-history';
+import commandHistoryUtil from 'util/command-history';
 
 export default function(api) {
 
@@ -95,10 +95,10 @@ export default function(api) {
         });
 
         if (commandInput.length) {
-            commandHistory.addHistory(commandInput);
+            commandHistoryUtil.addHistory(commandInput);
         }
 
-        commandHistory.resetIndex();
+        commandHistoryUtil.resetIndex();
 
         commandInput = '';
         cursorPosition = commandInput.length;
@@ -114,6 +114,23 @@ export default function(api) {
         } else if (keyCode === keys.right) {
             cursorPosition = (cursorPosition + 1) > commandInput.length ? commandInput.length : cursorPosition + 1;
         }
+
+        drawInput();
+    }
+
+    function commandHistory(e) {
+        var keyCode = e.which;
+        var newCommand;
+
+        if (keyCode === keys.up) {
+            newCommand = commandHistoryUtil.getNextCommand();
+        }
+        else if (keyCode === keys.down) {
+            newCommand = commandHistoryUtil.getPreviousCommand();
+        }
+
+        commandInput = newCommand === undefined ? '' : newCommand;
+        cursorPosition = commandInput.length;
 
         drawInput();
     }
@@ -188,6 +205,9 @@ export default function(api) {
     listener.simple_combo('enter', fireCommand);
     listener.simple_combo('left', cursorMove);
     listener.simple_combo('right', cursorMove);
+
+    listener.simple_combo('up', commandHistory);
+    listener.simple_combo('down', commandHistory);
 
     listener.simple_combo('backspace', backspace);
     listener.simple_combo('delete', del);
