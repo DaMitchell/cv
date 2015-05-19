@@ -18,7 +18,7 @@ export default function() {
     }
 
     function execute() {
-
+        var deferred = $.Deferred();
         var testText = 'This is some test text to see the colors';
         var colors = [
             'black',
@@ -31,9 +31,17 @@ export default function() {
             'white',
         ];
 
-        colors.map(function(color){
-            $(api).trigger(Events.OUTPUT, {content: testText, classes: [color]});
+        colors.map(function(color, i){
+            _.delay(function() {
+                $(api).trigger(Events.OUTPUT, {content: testText, classes: [color, 'fade-in']});
+
+                if(i === (colors.length - 1)) {
+                    deferred.resolve();
+                }
+            }, (i * 100));
         });
+
+        return deferred.promise();
     }
 
     return {

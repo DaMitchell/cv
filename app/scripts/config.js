@@ -3,7 +3,8 @@
 import CommandAbout from 'command/about';
 import CommandClear from 'command/clear';
 import CommandHelp from 'command/help';
-import CommandTest from 'command/test';
+import CommandTest from 'command/table';
+import CommandTable from 'command/test';
 import CommandWindow from 'command/window';
 
 export default {
@@ -15,6 +16,7 @@ export default {
         new CommandHelp(),
         new CommandAbout(),
         new CommandClear(),
+        new CommandTable(),
         new CommandTest()
     ],
 

@@ -3,6 +3,10 @@
     line-height: $console-line-height;
     white-space: pre-wrap;
 
+    &.table {
+        white-space: pre;
+    }
+
     &::selection {
         background: $console-color-selection;
         color: $console-color-selection-text;

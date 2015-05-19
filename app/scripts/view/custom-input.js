@@ -21,6 +21,11 @@ export default function(api) {
     var cursorElement = inputElement.find('.cursor');
 
     /**
+     * @type {jQuery}
+     */
+    var clipboardElement = inputElement.find('.clipboard-input');
+
+    /**
      * @type {string}
      */
     var commandInput = '';
@@ -153,14 +158,12 @@ export default function(api) {
     }
 
     function paste() {
-        var clipboard = inputElement.find('.clipboard-input');
-
-        clipboard.focus();
+        clipboardElement.focus();
 
         //wait until Browser insert text to textarea
         setTimeout(function() {
-            updateCommand(clipboard.val());
-            clipboard.blur().val('');
+            updateCommand(clipboardElement.val());
+            clipboardElement.blur().val('');
         }, 10);
 
         return true;
@@ -178,6 +181,7 @@ export default function(api) {
 
     function onKeyPress(e) {
         if (!e.ctrlKey && !e.altKey && $.inArray(e.which, [91, 93]) < 0) {
+            $('.nano').nanoScroller({ scroll: 'bottom' });
             updateCommand(String.fromCharCode(e.which));
         }
     }
@@ -223,11 +227,23 @@ export default function(api) {
 
     $(api).off(Events.READY, onReady).on(Events.READY, onReady);
 
-    $(document).on('click.console', function(e) {
+    $(document.documentElement || window).on('click.console', function(e) {
         if (!$(e.target).closest('#console').hasClass('console')) {
             disable();
         }
     });
 
     $(api.config.container).on('click', enable);
+
+    /* jshint ignore:start */
+    if (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch) {
+        clipboardElement.off('keypress', onKeyPress).on('keypress', onKeyPress);
+
+        $(api.config.container).click(function() {
+            clipboardElement.focus();
+        });
+
+        clipboardElement.focus();
+    }
+    /* jshint ignore:end */
 }
