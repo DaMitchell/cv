@@ -22,7 +22,7 @@ export default function(api) {
         down: 40
     };
 
-    var prompt = new Prompt(api);
+    var prompt = new Prompt($(api.config.input).find('.prompt'));
 
     function onInputShow() {
         $(api.config.input).show().addClass('fade-in');
@@ -70,6 +70,9 @@ export default function(api) {
             inputElement[0].selectionStart = inputElement[0].selectionEnd = inputElement[0].value.length;
         }
     }
+
+    $(api).off(Events.READY, prompt.updateTime).on(Events.READY, prompt.updateTime);
+    $(api).off(Events.COMMAND_SUBMIT, prompt.updateTime).on(Events.COMMAND_SUBMIT, prompt.updateTime);
 
     $(api).off(Events.READY, onInputShow).on(Events.READY, onInputShow);
 

@@ -2,10 +2,10 @@
 // nanoScrollerJS (Sass)
 // --------------------------------------------------
 /** initial setup **/
-$nanoClass: "nano" !default;
-$paneClass: "nano-pane" !default;
-$sliderClass: "nano-slider" !default;
-$contentClass: "nano-content" !default;
+$nanoClass: "console" !default;
+$paneClass: "console-pane" !default;
+$sliderClass: "console-slider" !default;
+$contentClass: "console-content" !default;
 
 .#{$nanoClass} {
     position: absolute;
@@ -75,9 +75,9 @@ $contentClass: "nano-content" !default;
 }
 
 
-.nano {
-    > .nano-pane {
-        > .nano-slider {
+.console {
+    > .#{$paneClass} {
+        > .#{$sliderClass} {
             background: $console-color-foreground;
         }
     }

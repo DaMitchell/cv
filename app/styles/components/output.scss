@@ -2,6 +2,8 @@
     min-height: $console-font-size * $console-line-height;
     line-height: $console-line-height;
     white-space: pre-wrap;
+    word-break: break-all;
+    word-wrap: break-word;
 
     &.table {
         white-space: pre;
@@ -15,10 +17,6 @@
     &::-moz-selection {
         background: $console-color-selection;
         color: $console-color-selection-text;
-    }
-
-    @include breakpoint(tablet) {
-        min-width: 600px;
     }
 }
 

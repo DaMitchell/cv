@@ -7,13 +7,11 @@ import commandHistoryUtil from 'util/command-history';
 
 export default function(api) {
 
-    var prompt = new Prompt(api);
-
     /**
      *
      * @type {jQuery}
      */
-    var inputElement = $(api.config.input);
+    var inputElement = $(api.config.container).find(api.config.inputSelector);
 
     /**
      * @type {jQuery}
@@ -34,6 +32,8 @@ export default function(api) {
      * @type {number}
      */
     var cursorPosition = commandInput.length;
+
+    var prompt = new Prompt(inputElement.find(api.config.promptSelector));
 
     var listener = new window.keypress.Listener();
 
@@ -225,15 +225,13 @@ export default function(api) {
     listener.simple_combo('cmd right', end);
     listener.simple_combo('ctrl right', end);
 
+    $(api).off(Events.ENABLE, enable).on(Events.ENABLE, enable);
+    $(api).off(Events.DISABLE, disable).on(Events.DISABLE, disable);
+
+    $(api).off(Events.READY, prompt.updateTime).on(Events.READY, prompt.updateTime);
+    $(api).off(Events.COMMAND_SUBMIT, prompt.updateTime).on(Events.COMMAND_SUBMIT, prompt.updateTime);
+
     $(api).off(Events.READY, onReady).on(Events.READY, onReady);
-
-    $(document.documentElement || window).on('click.console', function(e) {
-        if (!$(e.target).closest('#console').hasClass('console')) {
-            disable();
-        }
-    });
-
-    $(api.config.container).on('click', enable);
 
     /* jshint ignore:start */
     if (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch) {

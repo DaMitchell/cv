@@ -44,13 +44,25 @@ function attachAndInitCommands(api) {
     }
 }
 
-export default function(config) {
+export default function(container, config) {
     config = config || {};
+    config.container = container;
 
     api.config = $.extend({}, api.config, config || {});
 
     attachAndInitCommands(api);
     initDependencies(api);
+
+    $(document.documentElement || window).on('click.console', function(e) {
+        if (!$(e.target).closest($(api.config.container)).hasClass('console')) {
+            $(api).trigger(Events.DISABLE);
+        }
+    });
+
+    $(api.config.container).on('click', function() {
+        $(api).trigger(Events.ENABLE);
+
+    });
 
     $(api).trigger(Events.READY);
 

@@ -1,16 +1,9 @@
 'use strict';
 
-import Events from 'events';
-
 /**
- * @param {Object} api
+ * @param {jQuery} api
  */
-export default function(api) {
-    /**
-     * @type {jQuery}
-     */
-    var promptElement = $(api.config.input).find('.prompt');
-
+export default function(promptElement) {
     /**
      * @param {number|string} number
      * @param {number} size
@@ -40,10 +33,8 @@ export default function(api) {
         return $.trim(promptElement.text());
     }
 
-    $(api).on(Events.COMMAND_SUBMIT, updateTime);
-    $(api).on(Events.READY, updateTime);
-
     return {
+        updateTime: updateTime,
         getPromptText: getPromptText
     };
 }

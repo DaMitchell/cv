@@ -7,12 +7,18 @@ export default function(api) {
     /**
      * @type {jQuery}
      */
-    var outputElement = $(api.config.output);
+    var outputElement = $(api.config.container).find(api.config.outputSelector);
 
     /**
      * @type {jQuery}
      */
     var contentElement = $(api.config.container).find('.console-content');
+
+    var nanoConfig = {
+        paneClass : 'console-pane',
+        sliderClass : 'console-slider',
+        contentClass : 'console-content'
+    };
 
     function addOutputLine(text, classes) {
         var lineClasses = ['line'];
@@ -40,8 +46,8 @@ export default function(api) {
         addOutputLine(message, ['red']);
     }
 
-    function onCommandComplete() {
-        $('.nano').nanoScroller();
+    function updateNanoScroller() {
+        $(api.config.container).nanoScroller(nanoConfig);
     }
 
     function onOutput(e, data) {
@@ -55,15 +61,17 @@ export default function(api) {
     $(api).on(Events.COMMAND_NOT_FOUND, onCommandNotFound);
     $(api).on(Events.COMMAND_ERROR, onCommandError);
     $(api).on(Events.COMMAND_SUBMIT, onCommandSubmit);
-    $(api).on(Events.COMMAND_COMPLETE, onCommandComplete);
+    $(api).on(Events.COMMAND_COMPLETE, updateNanoScroller);
     $(api).on(Events.OUTPUT_CLEAR, onOutputClear);
     $(api).on(Events.OUTPUT, onOutput);
+
+    $(api).on(Events.READY, updateNanoScroller);
 
     for (var i = 0, length = api.config.initOutput.length; i < length; i++) {
         addOutputLine(api.config.initOutput[i], ['fade-in']);
     }
 
-    $('.nano').nanoScroller();
+    //$(api.container).nanoScroller(nanoConfig);
 
     return {
         addOutputLine: addOutputLine

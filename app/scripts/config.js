@@ -20,10 +20,11 @@ export default {
         new CommandTest()
     ],
 
-    loading: $('#loading'),
-    container: $('#console'),
-    input: $('#input'),
-    output: $('#output'),
+    container: null,
+
+    inputSelector: '.input-holder',
+    outputSelector: '.output-holder',
+    promptSelector: '.prompt',
 
     initOutput: [
         'Type "help" to get a list of commands',

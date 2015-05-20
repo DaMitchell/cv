@@ -16,7 +16,7 @@
 </head>
 <body>
 
-    <div id="console" class="console center fade-in">
+    <div id="console" class="center fade-in">
         <header>
             <div class="buttons">
                 <div class="btn red"></div>
@@ -26,10 +26,10 @@
 
             Interactive Console CV
         </header>
-        <div class="nano">
-            <div class="console-content nano-content">
-                <div id="output" class="output"></div>
-                <div id="input">
+        <div class="console">
+            <div class="console-content">
+                <div class="output-holder"></div>
+                <div class="input-holder">
                     <span class="prompt">user@cv [<span class="time">--:--:--</span>]&gt;&nbsp;</span>
                     <span class="input">
                         <span></span><span class="cursor">&nbsp;</span><span></span>
@@ -66,7 +66,7 @@
     <!-- endbuild -->
 
     <script>
-        require('main')['default']();
+        require('main')['default']($('.console'));
     </script>
 </body>
 </html>
