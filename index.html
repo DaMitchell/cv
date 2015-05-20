@@ -1,4 +1,4 @@
-<!doctype html> <html> <head> <meta charset=utf-8> <meta name=description> <meta name=viewport content="width=device-width, initial-scale=1"> <title>Interactive CV</title>  <link href="http://fonts.googleapis.com/css?family=Source+Code+Pro" rel=stylesheet type=text/css> <link rel=stylesheet href=styles/main.css> </head> <body> <div id=console class="console center fade-in"> <header> <div class=buttons> <div class="btn red"></div> <div class="btn yellow"></div> <div class="btn green"></div> </div> Interactive Console CV </header> <div class=nano> <div class="console-content nano-content"> <div id=output class=output></div> <div id=input> <span class=prompt>user@cv [<span class=time>--:--:--</span>]&gt;&nbsp;</span> <span class=input> <span></span><span class=cursor>&nbsp;</span><span></span> </span> <div class=clipboard><textarea class=clipboard-input></textarea></div> </div> </div> </div> <footer></footer> </div>  <script>
+<!doctype html> <html> <head> <meta charset=utf-8> <meta name=description> <meta name=viewport content="width=device-width, initial-scale=1"> <title>Interactive CV</title>  <link href="http://fonts.googleapis.com/css?family=Source+Code+Pro" rel=stylesheet type=text/css> <link rel=stylesheet href=styles/main.css> </head> <body> <div id=console class="center fade-in"> <header> <div class=buttons> <div class="btn red"></div> <div class="btn yellow"></div> <div class="btn green"></div> </div> Interactive Console CV </header> <div class=console> <div class=console-content> <div class=output-holder></div> <div class=input-holder> <span class=prompt>user@cv [<span class=time>--:--:--</span>]&gt;&nbsp;</span> <span class=input> <span></span><span class=cursor>&nbsp;</span><span></span> </span> <div class=clipboard><textarea class=clipboard-input></textarea></div> </div> </div> </div> <footer></footer> </div>  <script>
         (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
             function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
             e=o.createElement(i);r=o.getElementsByTagName(i)[0];
@@ -6,5 +6,5 @@
             r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
         ga('create','UA-48173816-1');ga('send','pageview');
     </script> <script src=scripts/vendor.js></script> <script src=scripts/app.js></script> <script>
-        require('main')['default']();
+        require('main')['default']($('.console'));
     </script> </body> </html> 
