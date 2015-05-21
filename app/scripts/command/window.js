@@ -62,7 +62,7 @@ export default function() {
                 });
             }
 
-            container.parent().removeClass('min max').addClass(sizeClass);
+            container.parents('#console').removeClass('min max').addClass(sizeClass);
 
             return transition ? deferred.promise() : deferred.resolve();
         }

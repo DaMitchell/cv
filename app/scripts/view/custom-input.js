@@ -188,19 +188,46 @@ export default function(api) {
 
     function onReady() {
         inputElement.show().addClass('fade-in');
-        enable();
+
+        api.isChild ? disable() : enable();
+
         drawInput();
     }
 
     function enable() {
         cursorElement.addClass('enable');
+
+        //listener.register_many(keyListeners);
+        listener.listen();
+
         $(document).off('keypress', onKeyPress).on('keypress', onKeyPress);
     }
 
     function disable() {
         $(document).off('keypress', onKeyPress);
+
+        //listener.reset();
+        listener.stop_listening();
+
         cursorElement.removeClass('enable');
     }
+
+    /*var keyListeners = [
+        {'keys': 'tab', 'on_keydown': function(){return false;}},
+        {'keys': 'enter', 'on_keydown': fireCommand},
+        {'keys': 'left', 'on_keydown': cursorMove},
+        {'keys': 'right', 'on_keydown': cursorMove},
+        {'keys': 'up', 'on_keydown': commandHistory},
+        {'keys': 'down', 'on_keydown': commandHistory},
+        {'keys': 'backspace', 'on_keydown': backspace},
+        {'keys': 'delete', 'on_keydown': del},
+        {'keys': 'cmd v', 'on_keydown': paste},
+        {'keys': 'ctrl v', 'on_keydown': paste},
+        {'keys': 'cmd left', 'on_keydown': start},
+        {'keys': 'ctrl left', 'on_keydown': start},
+        {'keys': 'cmd right', 'on_keydown': end},
+        {'keys': 'ctrl right', 'on_keydown': end},
+    ];*/
 
     listener.simple_combo('tab', function() {
         return false;

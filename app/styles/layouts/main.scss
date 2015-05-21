@@ -115,4 +115,36 @@
             }
         }
     }
+
+    .left {
+        position: absolute;
+        top: $console-header-height;
+        left: 0;
+        bottom: 0;
+        width: 50%;
+
+        border-right: 1px solid $console-color-foreground;
+
+        .console,
+        .left,
+        .right {
+            top: 0;
+        }
+    }
+
+    .right {
+        position: absolute;
+        top: $console-header-height;
+        right: 0;
+        bottom: 0;
+        width: 50%;
+
+        border-left: 1px solid $console-color-foreground;
+
+        .console,
+        .left,
+        .right {
+            top: 0;
+        }
+    }
 }

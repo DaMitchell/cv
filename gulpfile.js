@@ -34,6 +34,9 @@ gulp.task('scripts', ['jshint'], function() {
             formatter: require('es6-module-transpiler-amd-formatter'),
             basePath: 'app/scripts'
         }))
+        .on('error', function(err) {
+            console.log(err);
+        })
         .pipe($.concat('app.js'))
         .pipe($.sourcemaps.write('./'))
         .pipe(gulp.dest('.tmp/scripts'))
