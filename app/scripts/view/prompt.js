@@ -1,15 +1,26 @@
 'use strict';
 
 /**
- * @param {jQuery} api
+ * @param {jQuery} element
+ * @constructor
  */
-export default function(promptElement) {
+var Prompt = function(element) {
+    this.element = element;
+};
+
+Prompt.prototype = {
+    /**
+     * @type {jQuery}
+     */
+    element: null,
+
     /**
      * @param {number|string} number
      * @param {number} size
+     *
      * @returns {string}
      */
-    function zeroFill(number, size) {
+    zeroFill: function(number, size) {
         number = number.toString();
 
         while (number.length < size) {
@@ -17,24 +28,21 @@ export default function(promptElement) {
         }
 
         return number;
-    }
+    },
 
-    function updateTime() {
+    updateTime: function() {
         var date = new Date();
-        var time = zeroFill(date.getHours(), 2) + ':' + zeroFill(date.getMinutes(), 2) + ':' + zeroFill(date.getSeconds(), 2);
+        var time = this.zeroFill(date.getHours(), 2) + ':' + this.zeroFill(date.getMinutes(), 2) + ':' + this.zeroFill(date.getSeconds(), 2);
 
-        promptElement.find('.time').text(time);
-    }
+        this.element.find('.time').text(time);
+    },
 
     /**
      * @returns {string}
      */
-    function getPromptText() {
-        return $.trim(promptElement.text());
+    getPromptText: function() {
+        return $.trim(this.element.text());
     }
+};
 
-    return {
-        updateTime: updateTime,
-        getPromptText: getPromptText
-    };
-}
+export default Prompt;

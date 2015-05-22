@@ -1,40 +1,40 @@
 'use strict';
 
-/**
- * @type {string[]}
- */
-var historyArray = [];
+var CommandHistory = function() {
+    /**
+     * @type {string[]}
+     */
+    this.historyArray = [];
 
-/**
- * @type {Number}
- */
-var currentIndex = 0;
-
-function resetIndex() {
-    currentIndex = historyArray.length;
-}
-
-function addHistory(command) {
-    historyArray.push(command);
-}
-
-function getNextCommand() {
-    if ((currentIndex - 1) < 0) {
-        return historyArray[currentIndex];
-    }
-
-    currentIndex--;
-    return historyArray[currentIndex];
-}
-
-function getPreviousCommand() {
-    currentIndex++;
-    return historyArray[currentIndex];
-}
-
-export default {
-    resetIndex: resetIndex,
-    addHistory: addHistory,
-    getNextCommand: getNextCommand,
-    getPreviousCommand: getPreviousCommand
+    /**
+     * @type {Number}
+     */
+    this.currentIndex = 0;
 };
+
+CommandHistory.prototype = {
+    resetIndex: function() {
+        this.currentIndex = this.historyArray.length;
+    },
+
+    addHistory: function(command) {
+        this.historyArray.push(command);
+    },
+
+    getNextCommand: function() {
+        if ((this.currentIndex - 1) < 0) {
+            return this.historyArray[this.currentIndex];
+        }
+
+        this.currentIndex--;
+
+        return this.historyArray[this.currentIndex];
+    },
+
+    getPreviousCommand: function() {
+        this.currentIndex++;
+        return this.historyArray[this.currentIndex];
+    }
+};
+
+export default CommandHistory;

@@ -3,12 +3,11 @@
 
 import Events from 'events';
 import Prompt from 'view/prompt';
-import commandHistoryUtil from 'util/command-history';
+import CommandHistory from 'util/command-history';
 
 export default function(api) {
 
     /**
-     *
      * @type {jQuery}
      */
     var inputElement = $(api.config.container).find(api.config.inputSelector);
@@ -33,6 +32,14 @@ export default function(api) {
      */
     var cursorPosition = commandInput.length;
 
+    /**
+     * @type {CommandHistory}
+     */
+    var commandHistoryUtil = new CommandHistory();
+
+    /**
+     * @type {Prompt}
+     */
     var prompt = new Prompt(inputElement.find(api.config.promptSelector));
 
     var listener = new window.keypress.Listener();
@@ -181,7 +188,7 @@ export default function(api) {
 
     function onKeyPress(e) {
         if (!e.ctrlKey && !e.altKey && $.inArray(e.which, [91, 93]) < 0) {
-            $('.nano').nanoScroller({ scroll: 'bottom' });
+            $('.nano').nanoScroller({scroll: 'bottom'});
             updateCommand(String.fromCharCode(e.which));
         }
     }
@@ -189,45 +196,26 @@ export default function(api) {
     function onReady() {
         inputElement.show().addClass('fade-in');
 
-        api.isChild ? disable() : enable();
+        if (api.hierarchy.hasParent()) {
+            disable();
+        } else {
+            enable();
+        }
 
         drawInput();
     }
 
     function enable() {
         cursorElement.addClass('enable');
-
-        //listener.register_many(keyListeners);
         listener.listen();
-
         $(document).off('keypress', onKeyPress).on('keypress', onKeyPress);
     }
 
     function disable() {
         $(document).off('keypress', onKeyPress);
-
-        //listener.reset();
         listener.stop_listening();
-
         cursorElement.removeClass('enable');
     }
-
-    /*var keyListeners = [
-        {'keys': 'tab', 'on_keydown': function(){return false;}},
-        {'keys': 'enter', 'on_keydown': fireCommand},
-        {'keys': 'left', 'on_keydown': cursorMove},
-        {'keys': 'right', 'on_keydown': cursorMove},
-        {'keys': 'up', 'on_keydown': commandHistory},
-        {'keys': 'down', 'on_keydown': commandHistory},
-        {'keys': 'backspace', 'on_keydown': backspace},
-        {'keys': 'delete', 'on_keydown': del},
-        {'keys': 'cmd v', 'on_keydown': paste},
-        {'keys': 'ctrl v', 'on_keydown': paste},
-        {'keys': 'cmd left', 'on_keydown': start},
-        {'keys': 'ctrl left', 'on_keydown': start},
-        {'keys': 'cmd right', 'on_keydown': end},
-        {'keys': 'ctrl right', 'on_keydown': end},
-    ];*/
 
     listener.simple_combo('tab', function() {
         return false;
@@ -255,13 +243,16 @@ export default function(api) {
     $(api).off(Events.ENABLE, enable).on(Events.ENABLE, enable);
     $(api).off(Events.DISABLE, disable).on(Events.DISABLE, disable);
 
-    $(api).off(Events.READY, prompt.updateTime).on(Events.READY, prompt.updateTime);
-    $(api).off(Events.COMMAND_SUBMIT, prompt.updateTime).on(Events.COMMAND_SUBMIT, prompt.updateTime);
+    var updateTime = prompt.updateTime.bind(prompt);
+
+    $(api).off(Events.READY, updateTime).on(Events.READY, updateTime);
+    $(api).off(Events.COMMAND_SUBMIT, updateTime).on(Events.COMMAND_SUBMIT, updateTime);
 
     $(api).off(Events.READY, onReady).on(Events.READY, onReady);
 
     /* jshint ignore:start */
     if (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch) {
+        $(document).off('keypress', onKeyPress);
         clipboardElement.off('keypress', onKeyPress).on('keypress', onKeyPress);
 
         $(api.config.container).click(function() {

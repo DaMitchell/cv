@@ -19,15 +19,15 @@ export default function() {
 
     function execute() {
         var left = $('<div>').addClass('left');
-        var right = $('<div>').addClass('right').append($('<div>').addClass('console'));
+        var right = $('<div>').addClass('right').append(api.config.containerClone.clone());
 
         $(api.config.container).parent().append(left);
         $(api.config.container).parent().append(right);
 
         $(api.config.container).appendTo(left);
 
-        api.children.push(new require('console')['default'](right.find('.console'), {
-            isChild: true
+        api.hierarchy.addChild(new require('console')['default'](right.find('.console'), {
+            parent: api
         }));
     }
 

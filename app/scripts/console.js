@@ -5,12 +5,24 @@ import Config from 'config';
 
 import Runner from 'core/runner';
 import Tracking from 'core/tracking';
+import Hierarchy from 'core/hierarchy';
+
 import Input from 'view/custom-input';
 import Output from 'view/output';
 
 import Template from 'template/console';
 
 export default function(container, config) {
+    /**
+     * @type {{
+     *     config: (Config|*),
+     *     commands: Array,
+     *     views: {input: null, output: null, prompt: null},
+     *     runner: null,
+     *     tracking: null,
+     *     hierarchy: (Hierarchy|*)
+     * }}
+     */
     var api = {
         config: Config,
         commands: [],
@@ -21,8 +33,7 @@ export default function(container, config) {
         },
         runner: null,
         tracking: null,
-        isChild: false,
-        children: []
+        hierarchy: new Hierarchy()
     };
 
     function initTemplate(api) {
@@ -43,9 +54,9 @@ export default function(container, config) {
         var config = api.config;
 
         if (config.commands && _.isArray(config.commands)) {
-            config.commands.map(function(command, i){
-                if (typeof(command) === 'object') {
-                    api.commands.push(command);
+            config.commands.map(function(Command, i){
+                if (typeof(Command) === 'function') {
+                    api.commands.push(new Command());
 
                     if (typeof(api.commands[i].init) === 'function') {
                         api.commands[i].init(api);
@@ -58,8 +69,10 @@ export default function(container, config) {
     config = config || {};
     config.container = container;
 
-    api.isChild = config.isChild || false;
-    api.children = [];
+    if(config.parent) {
+        api.hierarchy.setParent(config.parent);
+        delete config.parent;
+    }
 
     api.config = $.extend({}, api.config, config || {});
 

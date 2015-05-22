@@ -7,19 +7,21 @@ import CommandSplit from 'command/split';
 import CommandTest from 'command/table';
 import CommandTable from 'command/test';
 import CommandWindow from 'command/window';
+import CommandExit from 'command/exit';
 
 export default {
     title: 'Console CV',
     version: '2.0.0',
 
     commands: [
-        new CommandWindow(),
-        new CommandHelp(),
-        new CommandAbout(),
-        new CommandClear(),
-        new CommandTable(),
-        new CommandTest(),
-        new CommandSplit()
+        CommandWindow,
+        CommandHelp,
+        CommandAbout,
+        CommandClear,
+        CommandTable,
+        CommandTest,
+        CommandSplit,
+        CommandExit
     ],
 
     container: null,
