@@ -1,7 +1,8 @@
 {
   "globals": {
     "ga": true,
-    "_": true
+    "_": true,
+    "DocumentTouch": true
   },
   "browser": true,
   "node": true,

@@ -3,6 +3,7 @@
 import Events from 'events';
 import Config from 'config';
 
+import EventDispatcher from 'event-dispatcher';
 import Runner from 'core/runner';
 import Tracking from 'core/tracking';
 import Hierarchy from 'core/hierarchy';
@@ -11,6 +12,58 @@ import Input from 'view/custom-input';
 import Output from 'view/output';
 
 import Template from 'template/console';
+
+class Views {
+    /**
+     * @param {Console} console
+     */
+    constructor(console) {
+        this.input = new Input(console);
+        this.output = new Output(console);
+    }
+}
+
+class Console {
+    /**
+     * @param {jQuery} container
+     * @param {Object} config
+     * @param {Console} parent
+     */
+    constructor(container, config, parent) {
+        this.config = $.extend({}, Config, config || {});
+        this.commands = [];
+
+        this.views = new Views(this);
+        this.eventDispatcher = new EventDispatcher(this);
+
+        this.hierarchy = new Hierarchy(parent);
+
+        this.runner = new Runner(this.commands, this.eventDispatcher);
+        //this.runner = new Runner(this);
+
+        this.tracking = new Tracking(this);
+
+        if(config.commands) {
+            this.addCommands(config.commands);
+        }
+    }
+
+    /**
+     * @param {Array} commands
+     */
+    addCommands(commands) {
+        commands.forEach((command) => {
+            this.addCommand(command);
+        });
+    }
+
+    /**
+     * @param {Object} command
+     */
+    addCommand(command) {
+
+    }
+}
 
 export default function(container, config) {
     /**
@@ -28,8 +81,7 @@ export default function(container, config) {
         commands: [],
         views: {
             input: null,
-            output: null,
-            prompt: null
+            output: null
         },
         runner: null,
         tracking: null,
@@ -46,7 +98,9 @@ export default function(container, config) {
         api.views.input = new Input(api);
         api.views.output = new Output(api);
 
-        api.runner = new Runner(api);
+        console.log(typeof ((new EventDispatcher(api)).on));
+
+        api.runner = new Runner(api.commands, new EventDispatcher(api));
         api.tracking = new Tracking(api);
     }
 
@@ -81,7 +135,9 @@ export default function(container, config) {
     initDependencies(api);
 
     $(document.documentElement || window).on('click.console', function(e) {
-        if (!$(e.target).closest($(api.config.container)).hasClass('console')) {
+        if (!($(e.target).parent('.console')[0] == $(api.config.container)[0]) ||
+            !$(e.target).closest($(api.config.container)).hasClass('console')
+        ) {
             $(api).trigger(Events.DISABLE);
         }
     });

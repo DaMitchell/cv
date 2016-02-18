@@ -27,8 +27,19 @@
     <!-- include source files here... -->
     <script src="scripts/app.js"></script>
     <!-- include spec files here... -->
-    <script src="spec/test.js"></script>
+    {{#specs}}
+    <script src="{{{src}}}"></script>
+    {{/specs}}
 
-    <script>mocha.run()</script>
+    <script>
+        var specs = [];
+        {{#specs}}
+        specs.push('{{{spec}}}');
+        {{/specs}}
+
+        require(specs);
+
+        mocha.run();
+    </script>
 </body>
 </html>

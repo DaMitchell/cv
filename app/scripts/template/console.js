@@ -8,7 +8,7 @@ export default [
             '<span class="input">',
                 '<span></span><span class="cursor">&nbsp;</span><span></span>',
             '</span>',
-            '<div class="clipboard"><textarea class="clipboard-input"></textarea></div>',
+            '<div class="clipboard"><input type="text" class="clipboard-input"/></div>',
         '</div>',
     '</div>'
 ];

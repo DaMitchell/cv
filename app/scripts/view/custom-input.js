@@ -33,6 +33,11 @@ export default function(api) {
     var cursorPosition = commandInput.length;
 
     /**
+     * @type {boolean}
+     */
+    var isMobile = ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;
+
+    /**
      * @type {CommandHistory}
      */
     var commandHistoryUtil = new CommandHistory();
@@ -43,6 +48,11 @@ export default function(api) {
     var prompt = new Prompt(inputElement.find(api.config.promptSelector));
 
     var listener = new window.keypress.Listener();
+
+    /**
+     * @type {boolean}
+     */
+    var enabled = false;
 
     /**
      * @type {{enter: number, up: number, down: number}}
@@ -187,9 +197,11 @@ export default function(api) {
     }
 
     function onKeyPress(e) {
-        if (!e.ctrlKey && !e.altKey && $.inArray(e.which, [91, 93]) < 0) {
-            $('.nano').nanoScroller({scroll: 'bottom'});
-            updateCommand(String.fromCharCode(e.which));
+        if(enabled) {
+            if (!e.ctrlKey && !e.altKey && $.inArray(e.which, [91, 93]) < 0) {
+                $('.nano').nanoScroller({scroll: 'bottom'});
+                updateCommand(String.fromCharCode(e.which));
+            }
         }
     }
 
@@ -206,13 +218,33 @@ export default function(api) {
     }
 
     function enable() {
+        enabled = true;
+
         cursorElement.addClass('enable');
         listener.listen();
-        $(document).off('keypress', onKeyPress).on('keypress', onKeyPress);
+
+        if (isMobile) {
+            clipboardElement.off('keypress', onKeyPress).on('keypress', onKeyPress);
+
+            $(api.config.container).click(function() {
+                clipboardElement.focus();
+            });
+
+            clipboardElement.focus();
+        } else {
+            $(document).off('keypress', onKeyPress).on('keypress', onKeyPress);
+        }
     }
 
     function disable() {
-        $(document).off('keypress', onKeyPress);
+        enabled = false;
+
+        if(isMobile) {
+            $(document).off('keypress', onKeyPress);
+        } else {
+            clipboardElement.off('keypress', onKeyPress);
+        }
+
         listener.stop_listening();
         cursorElement.removeClass('enable');
     }
@@ -249,17 +281,4 @@ export default function(api) {
     $(api).off(Events.COMMAND_SUBMIT, updateTime).on(Events.COMMAND_SUBMIT, updateTime);
 
     $(api).off(Events.READY, onReady).on(Events.READY, onReady);
-
-    /* jshint ignore:start */
-    if (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch) {
-        $(document).off('keypress', onKeyPress);
-        clipboardElement.off('keypress', onKeyPress).on('keypress', onKeyPress);
-
-        $(api.config.container).click(function() {
-            clipboardElement.focus();
-        });
-
-        clipboardElement.focus();
-    }
-    /* jshint ignore:end */
 }

@@ -1,80 +1,74 @@
 'use strict';
 
-/**
- * @constructor
- */
-var Hierarchy = function() {
-    this.parent = null;
-    this.children = [];
-};
-
-Hierarchy.prototype = {
-    parent: null,
+class Hierarchy {
 
     /**
-     * @type {Array}
+     * @param {Console} parent
      */
-    children: [],
+    constructor(parent) {
+        this.parent = parent;
+        this.children = [];
+    }
 
     /**
-     * @param child
+     * @param {Console} child
      * @returns {Hierarchy}
      */
-    addChild: function(child) {
+    addChild(child) {
         this.children.push(child);
         return this;
-    },
+    }
 
     /**
-     * @param child
+     * @param {Console} child
      * @returns {Hierarchy}
      */
-    removeChild: function(child) {
+    removeChild(child) {
         var index = _.indexOf(this.children, child);
 
-        if(index > -1) {
+        if (index > -1) {
             this.children.splice(index, 1);
         }
 
         return this;
-    },
+    }
 
     /**
      * @returns {Array}
      */
-    getChildren: function() {
+    getChildren() {
         return this.children;
-    },
+    }
 
     /**
      * @returns {boolean}
      */
-    hasChildren: function() {
+    hasChildren() {
         return !!this.children.length;
-    },
+    }
 
     /**
-     * @param parent
+     * @param {Console} parent
      * @returns {Hierarchy}
      */
-    setParent: function(parent) {
+    setParent(parent) {
         this.parent = parent;
         return this;
-    },
+    }
 
     /**
-     * @returns {null|*}
+     * @returns {null|Console}
      */
-    getParent: function() {
+    getParent() {
         return this.parent;
-    },
+    }
 
     /**
      * @returns {boolean}
      */
-    hasParent: function() {
+    hasParent() {
         return !!this.parent;
     }
-};
+}
 
 export default Hierarchy;

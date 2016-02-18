@@ -2,12 +2,29 @@
 
 import Events from 'events';
 
-export default function(api) {
-    function execute(event, data) {
+class Runner {
+    /**
+     * @param {Array} commands
+     * @param {EventDispatcher} eventDispatcher
+     */
+    constructor(commands, eventDispatcher) {
+        this._commands = commands;
+        this._eventDispatcher = eventDispatcher;
+
+        this._eventDispatcher
+            .off(Events.COMMAND_SUBMIT, this.execute.bind(this))
+            .on(Events.COMMAND_SUBMIT, this.execute.bind(this));
+    }
+
+    /**
+     * @param {jQuery.Event} event
+     * @param {Object} data
+     */
+    execute(event, data) {
         var result;
 
         if (data.command.length) {
-            var command = _.find(api.commands, function(command) {
+            var command = _.find(this._commands, function(command) {
                 if (typeof(command.getCommand) !== 'function') {
                     return false;
                 }
@@ -16,15 +33,15 @@ export default function(api) {
             });
 
             if (!command || typeof(command.execute) !== 'function') {
-                $(api).trigger(Events.COMMAND_NOT_FOUND, data);
+                this._eventDispatcher.trigger(Events.COMMAND_NOT_FOUND, data);
             } else {
                 result = command.execute(data.args);
             }
         }
 
         var done = function() {
-            $(api).trigger(Events.COMMAND_COMPLETE);
-        };
+            this._eventDispatcher.trigger(Events.COMMAND_COMPLETE);
+        }.bind(this);
 
         if (result && result.done) {
             result.done(done);
@@ -32,10 +49,6 @@ export default function(api) {
             done();
         }
     }
-
-    $(api).off(Events.COMMAND_SUBMIT, execute).on(Events.COMMAND_SUBMIT, execute);
-
-    return {
-        execute: execute
-    };
 }
+
+export default Runner;
