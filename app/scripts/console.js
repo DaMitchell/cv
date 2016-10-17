@@ -86,6 +86,10 @@ class Console {
         this._started = true;
         this.eventDispatcher.trigger(Events.READY, data);
 
+        console.log(this.options.initOutput);
+
+        this.options.initOutput.forEach((line) => this.eventDispatcher.trigger(Events.OUTPUT, {content: line}));
+
         return this;
     }
 

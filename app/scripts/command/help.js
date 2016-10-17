@@ -1,7 +1,7 @@
 'use strict';
 
-import Command from 'command/command';
-import Events from 'events';
+import Command from './command';
+import Events from '../events';
 
 class Help extends Command {
     constructor() {

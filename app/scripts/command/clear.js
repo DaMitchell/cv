@@ -1,7 +1,7 @@
 'use strict';
 
 import Command from './command';
-import Events from 'events';
+import Events from '../events';
 
 class Clear extends Command {
     constructor() {

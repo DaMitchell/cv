@@ -1,6 +1,6 @@
 'use strict';
 
-import Events from 'events';
+import Events from '../events';
 
 class Runner {
     /**

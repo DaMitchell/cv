@@ -1,8 +1,8 @@
 'use strict';
 
 import Command from './command';
-import Events from 'events';
-import transitionEvent from 'util/transition-event';
+import Events from '../events';
+import transitionEvent from '../util/transition-event';
 
 class Window extends Command {
     constructor() {

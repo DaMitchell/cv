@@ -1,6 +1,6 @@
 'use strict';
 
-import Console from 'console';
+import Console from '../console';
 
 class Hierarchy {
     /**

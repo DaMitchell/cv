@@ -1,7 +1,7 @@
 /* global ga */
 'use strict';
 
-import Events from 'events';
+import Events from '../events';
 
 class Tracking {
     constructor(eventDispatcher) {
