@@ -1,7 +1,7 @@
 'use strict';
 
-import Console from 'console';
+import create from './create';
 
 export default function(container, config) {
-    return new Console(container, config);
+    return create(container, config).start();
 }

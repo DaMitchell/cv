@@ -1,79 +1,86 @@
 'use strict';
 
-import Events from 'events';
-import linkify from 'util/linkify';
+import BaseView from './base-view';
+import Events from '../events';
 
-export default function(api) {
+import runLoop from '../run-loop';
+
+import linkify from '../util/linkify';
+import template from '../template/component/output';
+
+class Output extends BaseView {
+    constructor() {
+        super();
+
+        /**
+         * @type {jQuery}
+         */
+        this.element = $('<div class="output-holder"></div>');
+
+        /**
+         * @type {Array}
+         * @private
+         */
+        this._lines = [];
+    }
+
     /**
-     * @type {jQuery}
+     * @param {EventDispatcher} eventDispatcher
      */
-    var outputElement = $(api.config.container).find(api.config.outputSelector);
+    set eventDispatcher(eventDispatcher) {
+        eventDispatcher.on(Events.COMMAND_SUBMIT, this.onCommandSubmit.bind(this));
+        eventDispatcher.on(Events.COMMAND_NOT_FOUND, this.onCommandNotFound.bind(this));
+        eventDispatcher.on(Events.COMMAND_ERROR, this.onCommandError.bind(this));
+        eventDispatcher.on(Events.OUTPUT_CLEAR, this.onOutputClear.bind(this));
+        eventDispatcher.on(Events.OUTPUT, this.onOutput.bind(this));
+    }
+
+    onCommandSubmit(event, data) {
+        this.addOutputLine(data.prompt + ' ' + data.command + ' ' + data.args.join(' '));
+    }
+
+    onCommandNotFound(event, data) {
+        this.addOutputLine('The command "' + data.command + '" could not be found.');
+    }
+
+    onCommandError(event, message) {
+        this.addOutputLine(message, ['red']);
+    }
+
+    onOutput(event, data) {
+        this.addOutputLine(data.content, data.classes);
+    }
+
+    onOutputClear() {
+        this.element.find('.line').remove();
+    }
 
     /**
-     * @type {jQuery}
+     * @param {string} text
+     * @param {Array} classes
      */
-    var contentElement = $(api.config.container).find('.console-content');
-
-    var nanoConfig = {
-        paneClass : 'console-pane',
-        sliderClass : 'console-slider',
-        contentClass : 'console-content'
-    };
-
-    function addOutputLine(text, classes) {
+    addOutputLine(text, classes = []) {
         var lineClasses = ['line'];
 
         if (classes !== undefined && $.isArray(classes)) {
             lineClasses = lineClasses.concat(classes);
         }
 
-        var line = $('<div>').addClass(lineClasses.join(' ')).html(linkify(text));
-
-        outputElement.append(line);
-
-        contentElement.scrollTop(contentElement[0].scrollHeight);
+        this.element.append(template({
+            content: linkify(text),
+            classes: lineClasses.join(' ')
+        }));
     }
 
-    function onCommandSubmit(e, data) {
-        addOutputLine(data.prompt + ' ' + data.command + ' ' + data.args.join(' '));
+    render() {
+        //requestAnimationFrame(() => {
+            //this._lines.forEach((line) => this.element.append(line));
+            //this._lines = [];
+        //});
+
+        //this.element.html(template(data));
+        //this.parent.scrollTop(this.parent[0].scrollHeight);
     }
-
-    function onCommandNotFound(e, data) {
-        addOutputLine('The command "' + data.command + '" could not be found.');
-    }
-
-    function onCommandError(e, message) {
-        addOutputLine(message, ['red']);
-    }
-
-    function updateNanoScroller() {
-        $(api.config.container).nanoScroller(nanoConfig);
-    }
-
-    function onOutput(e, data) {
-        addOutputLine(data.content, data.classes);
-    }
-
-    function onOutputClear() {
-        outputElement.find('.line').remove();
-    }
-
-    $(api).on(Events.COMMAND_NOT_FOUND, onCommandNotFound);
-    $(api).on(Events.COMMAND_ERROR, onCommandError);
-    $(api).on(Events.COMMAND_SUBMIT, onCommandSubmit);
-    $(api).on(Events.COMMAND_COMPLETE, updateNanoScroller);
-    $(api).on(Events.OUTPUT_CLEAR, onOutputClear);
-    $(api).on(Events.OUTPUT, onOutput);
-
-    $(api).on(Events.READY, updateNanoScroller);
-
-    for (var i = 0, length = api.config.initOutput.length; i < length; i++) {
-        addOutputLine(api.config.initOutput[i], ['fade-in']);
-    }
-
-    //$(api.container).nanoScroller(nanoConfig);
-
-    return {
-        addOutputLine: addOutputLine
-    };
 }
+
+export default Output;

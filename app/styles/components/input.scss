@@ -1,5 +1,5 @@
 .input-holder {
-    display: none;
+    //display: none;
     line-height: $console-line-height;
 
     font-size: 0;
@@ -18,7 +18,7 @@
             word-wrap: break-word;
         }
 
-        .cursor.enable {
+        .cursor.enabled {
             background-color: $console-color-selection;
             color: $console-color-selection-text;
         }

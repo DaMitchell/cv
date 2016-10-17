@@ -1,284 +1,297 @@
 /*jshint camelcase: false */
 'use strict';
 
-import Events from 'events';
-import Prompt from 'view/prompt';
-import CommandHistory from 'util/command-history';
+import BaseView from './base-view';
+import Events from '../events';
+import CommandHistory from '../util/command-history';
 
-var input = function(api) {
+import runLoop from '../run-loop';
 
-    /**
-     * @type {jQuery}
-     */
-    var inputElement = $(api.config.container).find(api.config.inputSelector);
+import isMobile from '../util/is-mobile';
+import zeroFill from '../util/zero-fill';
+import template from '../template/component/input';
 
-    /**
-     * @type {jQuery}
-     */
-    var cursorElement = inputElement.find('.cursor');
+const keys = {
+    enter: 13,
+    left: 37,
+    up: 38,
+    right: 39,
+    down: 40
+};
 
-    /**
-     * @type {jQuery}
-     */
-    var clipboardElement = inputElement.find('.clipboard-input');
+class Input extends BaseView {
+    constructor() {
+        super();
 
-    /**
-     * @type {string}
-     */
-    var commandInput = '';
+        /**
+         * @type {jQuery}
+         */
+        this.element = $('<div class="input-holder"></div>');
 
-    /**
-     * @type {number}
-     */
-    var cursorPosition = commandInput.length;
+        /**
+         * @type {EventDispatcher}
+         * @private
+         */
+        this._eventDispatcher;
 
-    /**
-     * @type {boolean}
-     */
-    var isMobile = ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;
+        /**
+         * @type {CommandHistory}
+         * @private
+         */
+        this._commandHistory = new CommandHistory();
 
-    /**
-     * @type {CommandHistory}
-     */
-    var commandHistoryUtil = new CommandHistory();
+        /**
+         * @type {keypress.Listener}
+         * @private
+         */
+        this._listener = new window.keypress.Listener();
 
-    /**
-     * @type {Prompt}
-     */
-    var prompt = new Prompt(inputElement.find(api.config.promptSelector));
-
-    var listener = new window.keypress.Listener();
-
-    /**
-     * @type {boolean}
-     */
-    var enabled = false;
-
-    /**
-     * @type {{enter: number, up: number, down: number}}
-     */
-    var keys = {
-        enter: 13,
-        left: 37,
-        up: 38,
-        right: 39,
-        down: 40
-    };
-
-    /**
-     * Draw the input taking into account cursor position.
-     */
-    function drawInput() {
-        var beforeElement = cursorElement.prev();
-        var afterElement = cursorElement.next();
-
-        if (cursorPosition === commandInput.length) {
-            beforeElement.text(commandInput);
-            cursorElement.html('&nbsp;');
-            afterElement.text('');
-        } else if (cursorPosition === 0) {
-            beforeElement.text('');
-            cursorElement.text(commandInput.slice(0, 1));
-            afterElement.text(commandInput.slice(1));
-        } else {
-            beforeElement.text(commandInput.slice(0, cursorPosition));
-            cursorElement.text(commandInput.slice(cursorPosition, cursorPosition + 1));
-
-            if (cursorPosition === commandInput.length - 1) {
-                afterElement.text('');
-            } else {
-                afterElement.text(commandInput.slice(cursorPosition + 1));
-            }
-        }
+        /**
+         * @type {Object}
+         * @private
+         */
+        this._data = {};
     }
 
-    function updateCommand(string) {
-        if (cursorPosition === commandInput.length) {
-            commandInput += string;
-        } else if (cursorPosition === 0) {
-            commandInput = string + commandInput;
-        } else {
-            commandInput = commandInput.slice(0, cursorPosition) + string + commandInput.slice(cursorPosition);
-        }
+    /**
+     * @param {EventDispatcher} eventDispatcher
+     */
+    set eventDispatcher(eventDispatcher) {
+        this._eventDispatcher = eventDispatcher;
 
-        cursorPosition += string.length;
+        eventDispatcher.on(Events.ENABLE, this.enable.bind(this));
+        eventDispatcher.on(Events.DISABLE, this.disable.bind(this));
 
-        drawInput();
+        eventDispatcher.on(Events.READY, this.onReady.bind(this));
+        eventDispatcher.on(Events.COMMAND_COMPLETE, this.onCommandComplete.bind(this));
+
+        this._listener.simple_combo('enter', this.fireCommand.bind(this));
+
+        this._listener.simple_combo('up', this.commandHistory.bind(this));
+        this._listener.simple_combo('down', this.commandHistory.bind(this));
+        this._listener.simple_combo('left', this.moveCursor.bind(this));
+        this._listener.simple_combo('right', this.moveCursor.bind(this));
+
+        this._listener.simple_combo('backspace', this.backspace.bind(this));
+        this._listener.simple_combo('delete', this.del.bind(this));
+
+        this._listener.simple_combo('cmd v', this.paste.bind(this));
+        this._listener.simple_combo('ctrl v', this.paste.bind(this));
+
+        this._listener.simple_combo('cmd left', this.start.bind(this));
+        this._listener.simple_combo('ctrl left', this.start.bind(this));
+
+        this._listener.simple_combo('cmd right', this.end.bind(this));
+        this._listener.simple_combo('ctrl right', this.end.bind(this));
     }
 
-    function fireCommand() {
-        var inputArguments = commandInput.split(' ');
+    updateCommand(string) {
+        if (this._cursorPosition === this._commandInput.length) {
+            this._commandInput += string;
+        } else if (this._cursorPosition === 0) {
+            this._commandInput = string + this._commandInput;
+        } else {
+            this._commandInput = this._commandInput.slice(0, this._cursorPosition) +
+                string +
+                this._commandInput.slice(this._cursorPosition);
+        }
+
+        this._cursorPosition += string.length;
+    }
+
+    fireCommand() {
+        this.element.hide();
+
+        var inputArguments = this._commandInput.split(' ');
         var inputCommand = inputArguments.shift();
 
-        $(api).trigger(Events.COMMAND_SUBMIT, {
-            prompt: prompt.getPromptText(),
+        this._eventDispatcher.trigger(Events.COMMAND_SUBMIT, {
+            prompt: $.trim(this.element.find('.prompt').text()),
             command: inputCommand,
             args: inputArguments
         });
 
-        if (commandInput.length) {
-            commandHistoryUtil.addHistory(commandInput);
+        if (this._commandInput.length) {
+            this._commandHistory.addHistory(this._commandInput);
         }
 
-        commandHistoryUtil.resetIndex();
+        this._commandHistory.resetIndex();
 
-        commandInput = '';
-        cursorPosition = commandInput.length;
-
-        drawInput();
+        this._commandDate = new Date();
+        this._commandInput = '';
+        this._cursorPosition = 0;
     }
 
-    function cursorMove(e) {
-        var keyCode = e.which;
-
-        if (keyCode === keys.left) {
-            cursorPosition = (cursorPosition - 1) < 0 ? 0 : cursorPosition - 1;
-        } else if (keyCode === keys.right) {
-            cursorPosition = (cursorPosition + 1) > commandInput.length ? commandInput.length : cursorPosition + 1;
-        }
-
-        drawInput();
-    }
-
-    function commandHistory(e) {
-        var keyCode = e.which;
+    commandHistory(e) {
+        var keyCode = e.keyCode || e.which;
         var newCommand;
 
         if (keyCode === keys.up) {
-            newCommand = commandHistoryUtil.getNextCommand();
+            newCommand = this._commandHistory.getNextCommand();
         }
         else if (keyCode === keys.down) {
-            newCommand = commandHistoryUtil.getPreviousCommand();
+            newCommand = this._commandHistory.getPreviousCommand();
         }
 
-        commandInput = newCommand === undefined ? '' : newCommand;
-        cursorPosition = commandInput.length;
-
-        drawInput();
+        this._commandInput = newCommand === undefined ? '' : newCommand;
+        this._cursorPosition = this._commandInput.length;
     }
 
-    function backspace() {
-        if (commandInput !== '' && cursorPosition > 0) {
-            commandInput = commandInput.slice(0, cursorPosition - 1) + commandInput.slice(cursorPosition, commandInput.length);
-            cursorPosition--;
+    moveCursor(e) {
+        var keyCode = e.keyCode || e.which;
 
-            drawInput();
-        }
-    }
-
-    function del() {
-        if (commandInput !== '' && cursorPosition < commandInput.length) {
-            commandInput = commandInput.slice(0, cursorPosition) + commandInput.slice(cursorPosition + 1, commandInput.length);
-
-            drawInput();
+        if (keyCode === keys.left) {
+            this._cursorPosition = (this._cursorPosition - 1) < 0 ? 0 : this._cursorPosition - 1;
+        } else if (keyCode === keys.right) {
+            this._cursorPosition = (this._cursorPosition + 1) > this._commandInput.length ? this._commandInput.length : this._cursorPosition + 1;
         }
     }
 
-    function paste() {
+    backspace() {
+        if (this._commandInput !== '' && this._cursorPosition > 0) {
+            this._commandInput = this._commandInput.slice(0, this._cursorPosition - 1) +
+                this._commandInput.slice(this._cursorPosition, this._commandInput.length);
+            this._cursorPosition--;
+        }
+    }
+
+    del() {
+        if (this._commandInput !== '' && this._cursorPosition < this._commandInput.length) {
+            this._commandInput = this._commandInput.slice(0, this._cursorPosition) +
+                this._commandInput.slice(this._cursorPosition + 1, this._commandInput.length);
+        }
+    }
+
+    start() {
+        this._cursorPosition = 0;
+    }
+
+    end() {
+        this._cursorPosition = this._commandInput.length;
+    }
+
+    paste() {
+        var clipboardElement = this.element.find('.clipboard-input');
         clipboardElement.focus();
 
         //wait until Browser insert text to textarea
-        setTimeout(function() {
-            updateCommand(clipboardElement.val());
+        setTimeout(() => {
+            this.updateCommand(clipboardElement.val());
             clipboardElement.blur().val('');
         }, 10);
 
         return true;
     }
 
-    function start() {
-        cursorPosition = 0;
-        drawInput();
-    }
-
-    function end() {
-        cursorPosition = commandInput.length;
-        drawInput();
-    }
-
-    function onKeyPress(e) {
-        if(enabled) {
+    onKeyPress(e) {
+        if (this._enabled) {
             if (!e.ctrlKey && !e.altKey && $.inArray(e.which, [91, 93]) < 0) {
-                $('.nano').nanoScroller({scroll: 'bottom'});
-                updateCommand(String.fromCharCode(e.which));
+                //runLoop.defer('sync', this, 'updateCommand', String.fromCharCode(e.which));
+                this.updateCommand(String.fromCharCode(e.which));
             }
         }
     }
 
-    function onReady() {
-        inputElement.show().addClass('fade-in');
+    onReady(event, data) {
+        this._commandDate = new Date();
 
-        if (api.hierarchy.hasParent()) {
-            disable();
+        this.element.show();
+
+        if (data.hasParent) {
+            console.log('onReady and hasParent');
+            this.disable.apply(this, arguments);
         } else {
-            enable();
+            this.enable.apply(this, arguments);
         }
-
-        drawInput();
     }
 
-    function enable() {
-        enabled = true;
+    onCommandComplete() {
+        runLoop.deferOnce('complete', this.element, 'show');
+    }
 
-        cursorElement.addClass('enable');
-        listener.listen();
+    enable(event, data) {
+        if(!this._enabled) {
+            this._enabled = true;
 
-        if (isMobile) {
-            clipboardElement.off('keypress', onKeyPress).on('keypress', onKeyPress);
+            this._listener.listen();
 
-            $(api.config.container).click(function() {
+            if (isMobile()) {
+                this.element.off('keydown', '.clipboard-input').on('keydown', '.clipboard-input', this.onKeyPress.bind(this));
+
+                var clipboardElement = this.element.find('.clipboard-input');
+
+                $(data.container).click(() => clipboardElement.focus());//.keypress();
+
                 clipboardElement.focus();
-            });
+            } else {
+                if (!this._onKeyPressRef) {
+                    this._onKeyPressRef = (event) => runLoop.run(this, 'onKeyPress', event);
+                }
 
-            clipboardElement.focus();
-        } else {
-            $(document).off('keypress', onKeyPress).on('keypress', onKeyPress);
+                $(document).off('keypress', this._onKeyPressRef).on('keypress', this._onKeyPressRef);
+            }
         }
     }
 
-    function disable() {
-        enabled = false;
+    disable() {
+        if(this._enabled) {
+            this._enabled = false;
 
-        if(isMobile) {
-            $(document).off('keypress', onKeyPress);
-        } else {
-            clipboardElement.off('keypress', onKeyPress);
+            if (isMobile()) {
+                this.element.off('keydown', '.clipboard-input')
+            } else {
+                $(document).off('keypress', this._onKeyPressRef);
+            }
         }
-
-        listener.stop_listening();
-        cursorElement.removeClass('enable');
+        
+        this._listener.stop_listening();
     }
 
-    listener.simple_combo('tab', function() {
-        return false;
-    });
+    render() {
+        var data = {
+            enabled: this._enabled,
+            hh: zeroFill(this._commandDate.getHours(), 2),
+            mm: zeroFill(this._commandDate.getMinutes(), 2),
+            ss: zeroFill(this._commandDate.getSeconds(), 2),
+            beforeCursor: '',
+            cursor: '&nbsp;',
+            afterCursor: ''
+        };
 
-    listener.simple_combo('enter', fireCommand);
-    listener.simple_combo('left', cursorMove);
-    listener.simple_combo('right', cursorMove);
+        if (this._cursorPosition === this._commandInput.length) {
+            data.beforeCursor = this._commandInput;
+        } else if (this._cursorPosition === 0) {
+            data.cursor = this._commandInput.slice(0, 1);
+            data.afterCursor = this._commandInput.slice(1);
+        } else {
+            data.beforeCursor = this._commandInput.slice(0, this._cursorPosition);
+            data.cursor = this._commandInput.slice(this._cursorPosition, this._cursorPosition + 1);
 
-    listener.simple_combo('up', commandHistory);
-    listener.simple_combo('down', commandHistory);
+            if (this._cursorPosition !== this._commandInput.length - 1) {
+                data.afterCursor = this._commandInput.slice(this._cursorPosition + 1);
+            }
+        }
 
-    listener.simple_combo('backspace', backspace);
-    listener.simple_combo('delete', del);
-
-    listener.simple_combo('cmd v', paste);
-    listener.simple_combo('ctrl v', paste);
-
-    listener.simple_combo('cmd left', start);
-    listener.simple_combo('ctrl left', start);
-
-    listener.simple_combo('cmd right', end);
-    listener.simple_combo('ctrl right', end);
-
-    $(api).off(Events.ENABLE, enable).on(Events.ENABLE, enable);
-    $(api).off(Events.DISABLE, disable).on(Events.DISABLE, disable);
-
-    var updateTime = prompt.updateTime.bind(prompt);
-
-    $(api).off(Events.READY, updateTime).on(Events.READY, updateTime);
-    $(api).off(Events.COMMAND_SUBMIT, updateTime).on(Events.COMMAND_SUBMIT, updateTime);
-
-    $(api).off(Events.READY, onReady).on(Events.READY, onReady);
+        this.element.html(template(data));
+    }
 }
+
+[
+    {key: '_commandInput', initValue: ''},
+    {key: '_cursorPosition', initValue: 0},
+    {key: '_commandDate', initValue: new Date()},
+    {key: '_enabled', initValue: false}
+].forEach(function(prop){
+    Object.defineProperty(Input.prototype, prop.key, {
+        set: function(value) {
+            this._data[prop.key] = value;
+            //this.render();
+            runLoop.deferOnce('render', this, 'render');
+        },
+        get: function() {
+            return this._data[prop.key] || prop.initValue;
+        }
+    });
+});
+
+export default Input;

@@ -1,7 +1,5 @@
 'use strict';
 
-//import Backburner from 'backburner';
+import Backburner from 'lib/backburner';
 
-console.log(require('backburner'));
-
-//export default new Backburner(['render']);
+export default new Backburner.default(['sync', 'render', 'complete']);

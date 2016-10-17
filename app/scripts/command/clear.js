@@ -1,30 +1,20 @@
 'use strict';
 
+import Command from './command';
 import Events from 'events';
 
-export default function() {
-    var api;
-
-    function init(consoleApi) {
-        api = consoleApi;
+class Clear extends Command {
+    constructor() {
+        super('clear');
     }
 
-    function getCommand() {
-        return 'clear';
-    }
-
-    function getDescription() {
+    getDescription() {
         return 'Clear the window of all past output.';
     }
 
-    function execute() {
-        $(api).trigger(Events.OUTPUT_CLEAR);
+    execute() {
+        this._eventDispatcher.trigger(Events.OUTPUT_CLEAR);
     }
-
-    return {
-        init: init,
-        getCommand: getCommand,
-        getDescription: getDescription,
-        execute: execute
-    };
 }
+
+export default Clear;

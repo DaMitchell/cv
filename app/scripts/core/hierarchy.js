@@ -1,13 +1,17 @@
 'use strict';
 
-class Hierarchy {
+import Console from 'console';
 
+class Hierarchy {
     /**
      * @param {Console} parent
      */
     constructor(parent) {
-        this.parent = parent;
-        this.children = [];
+        if(parent !== undefined) {
+            this.setParent(parent);
+        }
+
+        this._children = [];
     }
 
     /**
@@ -15,7 +19,7 @@ class Hierarchy {
      * @returns {Hierarchy}
      */
     addChild(child) {
-        this.children.push(child);
+        this._children.push(child);
         return this;
     }
 
@@ -24,10 +28,10 @@ class Hierarchy {
      * @returns {Hierarchy}
      */
     removeChild(child) {
-        var index = _.indexOf(this.children, child);
+        var index = this._children.indexOf(child);
 
         if (index > -1) {
-            this.children.splice(index, 1);
+            this._children.splice(index, 1);
         }
 
         return this;
@@ -37,14 +41,14 @@ class Hierarchy {
      * @returns {Array}
      */
     getChildren() {
-        return this.children;
+        return this._children;
     }
 
     /**
      * @returns {boolean}
      */
     hasChildren() {
-        return !!this.children.length;
+        return !!this._children.length;
     }
 
     /**
@@ -52,22 +56,27 @@ class Hierarchy {
      * @returns {Hierarchy}
      */
     setParent(parent) {
-        this.parent = parent;
+        //TODO this looks like bullshit
+        if(!(parent instanceof Console.default)) {
+            throw new Error('parent must be an instance of Console');
+        }
+
+        this._parent = parent;
         return this;
     }
 
     /**
-     * @returns {null|Console}
+     * @returns {undefined|Console}
      */
     getParent() {
-        return this.parent;
+        return this._parent;
     }
 
     /**
      * @returns {boolean}
      */
     hasParent() {
-        return !!this.parent;
+        return !!this._parent;
     }
 }
 

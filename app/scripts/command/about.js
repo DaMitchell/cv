@@ -1,46 +1,33 @@
 'use strict';
 
+import Command from './command';
 import Events from 'events';
 
-export default function() {
-    var api;
-
-    function init(consoleApi) {
-        api = consoleApi;
+class About extends Command {
+    constructor() {
+        super('about');
     }
 
-    function getCommand() {
-        return 'about';
-    }
-
-    function getDescription() {
+    getDescription() {
         return 'Information on what this is all about.';
     }
 
-    function execute() {
-        function onError() {
-            $(api).trigger(Events.COMMAND_ERROR, 'There was an error getting fetching the about information.');
-        }
-
-        function onSuccess(data) {
-            for (var i = 0; i < data.lines.length; i++) {
-                $(api).trigger(Events.OUTPUT, {
-                    content: data.lines[i],
-                    classes: [
-                        'white',
-                        'fade-in'
-                    ]
+    execute() {
+        $.getJSON('data/about.json')
+            .done((data) => {
+                data.lines.forEach((line) => {
+                    this._eventDispatcher.trigger(Events.OUTPUT, {
+                        content: line,
+                        classes: [
+                            'white',
+                            'fade-in'
+                        ]
+                    });
                 });
-            }
-        }
-
-        $.getJSON('data/about.json').done(onSuccess).fail(onError);
+            })
+            .fail(() => this._eventDispatcher.trigger(Events.COMMAND_ERROR,
+                'There was an error getting fetching the about information.'));
     }
-
-    return {
-        init: init,
-        getCommand: getCommand,
-        getDescription: getDescription,
-        execute: execute
-    };
 }
+
+export default About;

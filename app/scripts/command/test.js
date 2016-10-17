@@ -31,7 +31,7 @@ export default function() {
             'white',
         ];
 
-        colors.map(function(color, i){
+        colors.forEach(function(color, i){
             _.delay(function() {
                 $(api).trigger(Events.OUTPUT, {content: testText, classes: [color, 'fade-in']});
 

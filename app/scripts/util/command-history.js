@@ -1,27 +1,27 @@
 'use strict';
 
-var CommandHistory = function() {
-    /**
-     * @type {string[]}
-     */
-    this.historyArray = [];
+class CommandHistory {
+    constructor() {
+        /**
+         * @type {string[]}
+         */
+        this.historyArray = [];
 
-    /**
-     * @type {Number}
-     */
-    this.currentIndex = 0;
-};
+        /**
+         * @type {Number}
+         */
+        this.currentIndex = 0;
+    }
 
-CommandHistory.prototype = {
-    resetIndex: function() {
+    resetIndex() {
         this.currentIndex = this.historyArray.length;
-    },
+    }
 
-    addHistory: function(command) {
+    addHistory(command) {
         this.historyArray.push(command);
-    },
+    }
 
-    getNextCommand: function() {
+    getNextCommand() {
         if ((this.currentIndex - 1) < 0) {
             return this.historyArray[this.currentIndex];
         }
@@ -29,12 +29,12 @@ CommandHistory.prototype = {
         this.currentIndex--;
 
         return this.historyArray[this.currentIndex];
-    },
+    }
 
-    getPreviousCommand: function() {
+    getPreviousCommand() {
         this.currentIndex++;
         return this.historyArray[this.currentIndex];
     }
-};
+}
 
 export default CommandHistory;

@@ -1,13 +1,20 @@
+/* global ga */
 'use strict';
 
 import Events from 'events';
 
-export default function(api) {
-    function onCommandSubmit(event, data) {
+class Tracking {
+    constructor(eventDispatcher) {
+        eventDispatcher
+            .off(Events.COMMAND_SUBMIT, this.onCommandSubmit)
+            .on(Events.COMMAND_SUBMIT, this.onCommandSubmit);
+    }
+
+    onCommandSubmit(event, data) {
         if (typeof(ga) === 'function') {
             ga('send', 'event', 'command', data.command, data.args.join(' '));
         }
     }
-
-    $(api).off(Events.COMMAND_SUBMIT, onCommandSubmit).on(Events.COMMAND_SUBMIT, onCommandSubmit);
 }
+
+export default Tracking;

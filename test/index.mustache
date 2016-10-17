@@ -4,12 +4,15 @@
     <meta charset="utf-8">
     <title>Mocha Spec Runner</title>
     <link rel="stylesheet" href="bower_components/mocha/mocha.css">
+    <link rel="stylesheet" href="styles/test.css">
 </head>
 <body>
+    <div class="console"></div>
+
     <div id="mocha"></div>
-    <script src="bower_components/mocha/mocha.js"></script>
+    <script src="/bower_components/mocha/mocha.js"></script>
     <script>mocha.setup('bdd')</script>
-    <script src="bower_components/chai/chai.js"></script>
+    <script src="/bower_components/chai/chai.js"></script>
     <script>
         var assert = chai.assert;
         var expect = chai.expect;
@@ -17,29 +20,45 @@
     </script>
 
     <!-- bower:js -->
+    <script src="/bower_components/requirejs/require.js"></script>
     <script src="/bower_components/jquery/dist/jquery.js"></script>
-    <script src="/bower_components/loader.js/loader.js"></script>
+    <script src="/bower_components/backburner.js/dist/backburner.concat.amd.js"></script>
+    <!--<script src="/bower_components/loader.js/loader.js"></script>-->
     <script src="/bower_components/underscore/underscore.js"></script>
-    <script src="/bower_components/nanoscroller/bin/javascripts/jquery.nanoscroller.js"></script>
-    <script src="/bower_components/Keypress/keypress-2.1.0.min.js"></script>
+    <!--<script src="/bower_components/nanoscroller/bin/javascripts/jquery.nanoscroller.js"></script>-->
+    <!--<script src="/bower_components/Keypress/keypress-2.1.0.min.js"></script>-->
+    <script src="/bower_components/handlebars/handlebars.runtime.amd.js"></script>
     <!-- endbower -->
 
     <!-- include source files here... -->
     <script src="scripts/app.js"></script>
     <!-- include spec files here... -->
     {{#specs}}
-    <script src="{{{src}}}"></script>
+        <!--<script src="{{{src}}}"></script>-->
     {{/specs}}
 
     <script>
-        var specs = [];
+        require.config({
+            paths: {
+                nanoscroller: '/bower_components/nanoscroller/bin/javascripts/jquery.nanoscroller',
+                keypress: '/bower_components/Keypress/keypress-2.1.0.min'
+            }
+        });
+
+        var specs = [
+            'nanoscroller',
+            'keypress'
+        ];
+
         {{#specs}}
         specs.push('{{{spec}}}');
         {{/specs}}
 
-        require(specs);
+        require(specs, function() {
+            window.keypress = require('keypress');
+            mocha.run();
+        });
 
-        mocha.run();
     </script>
 </body>
 </html>

@@ -1,23 +1,18 @@
 'use strict';
 
-import Events from 'events';
+import Command from './command';
+import Events from '../events';
 
-export default function() {
-    var api;
-
-    function init(consoleApi) {
-        api = consoleApi;
+class Split extends Command {
+    constructor() {
+        super('split');
     }
 
-    function getCommand() {
-        return 'split';
-    }
-
-    function getDescription() {
+    getDescription() {
         return 'Split the console window';
     }
 
-    function execute(args) {
+    execute(args) {
         var direction;
 
         switch(args[0]) {
@@ -30,42 +25,33 @@ export default function() {
         if(direction) {
             if(direction === 'vert') {
                 var left = $('<div>').addClass('left');
-                var right = $('<div>').addClass('right').append(api.config.containerClone.clone());
+                var right = $('<div>').addClass('right').append(this._console.containerClone.clone());
 
-                $(api.config.container).parent().append(left);
-                $(api.config.container).parent().append(right);
+                this._console.container.parent().append(left);
+                this._console.container.parent().append(right);
 
-                $(api.config.container).appendTo(left);
+                this._console.container.appendTo(left);
 
-                api.hierarchy.addChild(new require('console')['default'](right.find('.console'), {
-                    parent: api
-                }));
+                this._console.hierarchy.addChild(this._console.create(right.find('.console')).start());
             } else if(direction === 'horiz') {
                 var top = $('<div>').addClass('top');
-                var bottom= $('<div>').addClass('bottom').append(api.config.containerClone.clone());
+                var bottom= $('<div>').addClass('bottom').append(this._console.containerClone.clone());
 
-                $(api.config.container).parent().append(top);
-                $(api.config.container).parent().append(bottom);
+                this._console.container.parent().append(top);
+                this._console.container.parent().append(bottom);
 
-                $(api.config.container).appendTo(top);
+                this._console.container.appendTo(top);
 
-                api.hierarchy.addChild(new require('console')['default'](bottom.find('.console'), {
-                    parent: api
-                }));
+                this._console.hierarchy.addChild(this._console.create(bottom.find('.console')).start());
             }
 
             return true;
         }
 
-        $(api).trigger(Events.OUTPUT, {
-            content: 'Sorry "' + direction + '" is an invalid split direction.'
+        this._eventDispatcher.trigger(Events.OUTPUT, {
+            content: 'Sorry "' + args[0] + '" is an invalid split direction.'
         });
     }
-
-    return {
-        init: init,
-        getCommand: getCommand,
-        getDescription: getDescription,
-        execute: execute
-    };
 }
+
+export default Split;

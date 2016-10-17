@@ -1,27 +1,22 @@
 'use strict';
 
+import Command from './command';
 import Events from 'events';
 import transitionEvent from 'util/transition-event';
 
-export default function() {
-    var api;
-
-    function init(consoleApi) {
-        api = consoleApi;
+class Window extends Command {
+    constructor() {
+        super('window');
     }
 
-    function getCommand() {
-        return 'window';
-    }
-
-    function getDescription() {
+    getDescription() {
         return [
             'Allows you to change the size of the window.',
             'Will work depending on you screen size.'
         ];
     }
 
-    function getHelp() {
+    getHelp() {
         return [
             {content: 'Usage:', classes: ['yellow']},
             {content: '  window &lt;size&gt;', classes: ['fade-in']},
@@ -34,9 +29,9 @@ export default function() {
         ];
     }
 
-    function execute(args) {
+    execute(args) {
         var deferred = $.Deferred();
-        var container = $(api.config.container);
+        var container = this._console.container.parents('#console');
         var size = args[0];
 
         if (container.hasClass(size)) {
@@ -56,27 +51,18 @@ export default function() {
             var transition = transitionEvent();
 
             if(transition) {
-                container.one(transitionEvent(), function(){
-                    console.log('window transition fin');
-                    deferred.resolve();
-                });
+                container.one(transition, () => deferred.resolve());
             }
 
-            container.parents('#console').removeClass('min max').addClass(sizeClass);
+            container.removeClass('min max').addClass(sizeClass);
 
             return transition ? deferred.promise() : deferred.resolve();
         }
 
-        $(api).trigger(Events.OUTPUT, {
+        this._eventDispatcher.trigger(Events.OUTPUT, {
             content: 'Sorry "' + size + '" is an invalid size'
         });
     }
-
-    return {
-        init: init,
-        getCommand: getCommand,
-        getDescription: getDescription,
-        getHelp: getHelp,
-        execute: execute
-    };
 }
+
+export default Window;

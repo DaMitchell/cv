@@ -1,51 +1,45 @@
 'use strict';
 
-import Events from 'events';
-import Config from 'config';
+import Events from './events';
+import Config from './config';
+import Defaults from './defaults';
 
-import EventDispatcher from 'event-dispatcher';
-import Runner from 'core/runner';
-import Tracking from 'core/tracking';
-import Hierarchy from 'core/hierarchy';
+import EventDispatcher from './event-dispatcher';
+import Runner from './core/runner';
+import Tracking from './core/tracking';
+import Hierarchy from './core/hierarchy';
 
-import Input from 'view/custom-input';
-import Output from 'view/output';
-
-import Template from 'template/console';
-
-class Views {
-    /**
-     * @param {Console} console
-     */
-    constructor(console) {
-        this.input = new Input(console);
-        this.output = new Output(console);
-    }
-}
+import Views from './views';
 
 class Console {
     /**
      * @param {jQuery} container
-     * @param {Object} config
+     * @param {Object} options
      * @param {Console} parent
      */
-    constructor(container, config, parent) {
-        this.config = $.extend({}, Config, config || {});
+    constructor(container, options, parent) {
+        /**
+         * @type {boolean}
+         * @private
+         */
+        this._started = false;
+
+        this.container = container;
+        this.containerClone = container.clone();
+        this.options = $.extend({}, Config, options || {});
         this.commands = [];
 
-        this.views = new Views(this);
         this.eventDispatcher = new EventDispatcher(this);
-
         this.hierarchy = new Hierarchy(parent);
+        //this.tracking = new Tracking(this);
 
+        if(this.options.commands) {
+            this.addCommands(this.options.commands);
+        }
+
+        this.views = new Views(this.container, this.eventDispatcher, this.options.views || []);
         this.runner = new Runner(this.commands, this.eventDispatcher);
         //this.runner = new Runner(this);
-
-        this.tracking = new Tracking(this);
-
-        if(config.commands) {
-            this.addCommands(config.commands);
-        }
     }
 
     /**
@@ -54,100 +48,55 @@ class Console {
     addCommands(commands) {
         commands.forEach((command) => {
             this.addCommand(command);
-        });
+        }, this);
     }
 
     /**
-     * @param {Object} command
+     * @param {Command} command
      */
     addCommand(command) {
-
+        command.con = this;
+        command.eventDispatcher = this.eventDispatcher;
+        this.commands.push(command);
     }
-}
 
-export default function(container, config) {
     /**
-     * @type {{
-     *     config: (Config|*),
-     *     commands: Array,
-     *     views: {input: null, output: null, prompt: null},
-     *     runner: null,
-     *     tracking: null,
-     *     hierarchy: (Hierarchy|*)
-     * }}
+     * @returns {Console}
      */
-    var api = {
-        config: Config,
-        commands: [],
-        views: {
-            input: null,
-            output: null
-        },
-        runner: null,
-        tracking: null,
-        hierarchy: new Hierarchy()
-    };
+    start() {
+        //Render view
+        this.views.render();
 
-    function initTemplate(api) {
-        api.config.containerClone = $(api.config.container).clone();
+        var data = {
+            container: this.container,
+            hasParent: this.hierarchy.hasParent()
+        };
 
-        $(api.config.container).html(Template.join('\n'));
+        //add event listeners
+        $(document.documentElement || window).on('click.console', (e) => {
+            if (!($(e.target).parents('.console')[0] == this.container[0]) ||
+                !$(e.target).closest(this.container).hasClass('console')
+            ) {
+                this.eventDispatcher.trigger(Events.DISABLE, data);
+            }
+        });
+
+        this.container.on('click.console', () => this.eventDispatcher.trigger(Events.ENABLE, data));
+
+        this._started = true;
+        this.eventDispatcher.trigger(Events.READY, data);
+
+        return this;
     }
 
-    function initDependencies(api) {
-        api.views.input = new Input(api);
-        api.views.output = new Output(api);
+    create(container, options) {
+      options = options || {};
 
-        console.log(typeof ((new EventDispatcher(api)).on));
+      (options.views = options.views || []).push.apply(options.views, Defaults.defaultViews());
+      (options.commands = options.commands || []).push.apply(options.commands, Defaults.defaultCommands());
 
-        api.runner = new Runner(api.commands, new EventDispatcher(api));
-        api.tracking = new Tracking(api);
+      return new Console(container, options, this);
     }
-
-    function initCommands(api) {
-        var config = api.config;
-
-        if (config.commands && _.isArray(config.commands)) {
-            config.commands.map(function(Command, i){
-                if (typeof(Command) === 'function') {
-                    api.commands.push(new Command());
-
-                    if (typeof(api.commands[i].init) === 'function') {
-                        api.commands[i].init(api);
-                    }
-                }
-            });
-        }
-    }
-
-    config = config || {};
-    config.container = container;
-
-    if(config.parent) {
-        api.hierarchy.setParent(config.parent);
-        delete config.parent;
-    }
-
-    api.config = $.extend({}, api.config, config || {});
-
-    initTemplate(api);
-    initCommands(api);
-    initDependencies(api);
-
-    $(document.documentElement || window).on('click.console', function(e) {
-        if (!($(e.target).parent('.console')[0] == $(api.config.container)[0]) ||
-            !$(e.target).closest($(api.config.container)).hasClass('console')
-        ) {
-            $(api).trigger(Events.DISABLE);
-        }
-    });
-
-    $(api.config.container).on('click', function() {
-        $(api).trigger(Events.ENABLE);
-
-    });
-
-    $(api).trigger(Events.READY);
-
-    return api;
 }
+
+export default Console;
