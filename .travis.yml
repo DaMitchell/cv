@@ -4,6 +4,8 @@ node_js:
     - 0.12
 
 before_script:
+    - git config --global user.email "danmitchellster@gmail.com"
+    - git config --global user.name "damitchell"
     - npm install -g bower
     - bower install
 
