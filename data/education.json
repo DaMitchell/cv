@@ -1,0 +1,15 @@
+{
+    "lines": [
+        {"content": "Education", "classes": ["bold"]},
+        {"content": ""},
+        {"content": "Latimer community arts college (1999 - 2006)", "classes": ["underline"]},
+        {"content": "9 GCSE's: Mathematics, Science (double award), English, Design and Technology, ICT, Art 3D, French, Business Studies, Religious Studies"},
+        {"content": "3 A Levels: Mathematics, Chemistry and ICT"},
+        {"content": ""},
+        {"content": "De Montfort University (2006 - 2010)", "classes": ["underline"]},
+        {"content": "First Class BSc(Hons) in Computer Science"},
+        {"content": ""},
+        {"content": "De Montfort University (2010 - 2011)", "classes": ["underline"]},
+        {"content": "Postgraduate diploma in Software Engineering"}
+    ]
+}

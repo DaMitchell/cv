@@ -1,0 +1,17 @@
+{
+    "lines": [
+        {"content": "Experience", "classes": ["bold"]},
+        {"content": ""},
+        {"content": "MMT Digital — Developer", "classes": ["underline"]},
+        {"content": "June 2008 - June 2009"},
+        {"content": "Placement year for my degree where I worked on a range of projects that included basic styling work to some backend development in .Net. The company was also, at the time, developing in AS3 so I took it upon myself to learn the language and ended up developing a couple of applications that aided in process management between the client and us."},
+        {"content": ""},
+        {"content": "MMT Digital — Developer", "classes": ["underline"]},
+        {"content": "July 2010 - September 2010"},
+        {"content": "I was brought back to develop a mobile app using PhoneGap, which was built mainly using JS but I had to make changes in Java and Objective-C to handle specific differences in the PhoneGap framework to meet the clients requirements."},
+        {"content": ""},
+        {"content": "MMT Digital — Developer", "classes": ["underline"]},
+        {"content": "July 2011 - March 2014"},
+        {"content": "Working mostly in PHP, as well as front-end technologies, I was working on projects for an education publisher. One was for their in-house processes to manage all the asserts their products required and then moving them to the required platforms. The other was a front of class teaching aid that would allow the teacher to display these assets and plan lessons. Both projects were being run in an agile fashion, where we would have daily scrums sprint meeting every 2 weeks with the client to plan for the following sprint where we used either JIRA or Pivotal to track the work. I was also pulled onto a couple of Kentico products which required me to use .Net as well as my front-end skills."}
+    ]
+}
