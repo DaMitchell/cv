@@ -9,6 +9,8 @@ import fileset from 'fileset';
 import merge from 'merge-stream';
 import Handlebars from 'handlebars';
 
+const deploy = require('gulp-gh-pages');
+
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
 
@@ -155,6 +157,11 @@ gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
 gulp.task('build', ['html', 'styles', 'scripts', 'extras'], () => {
     $.util.log('Building', typeof gulp.start)
+});
+
+gulp.task('deploy', ['build'], function () {
+    return gulp.src("./dist/**/*")
+        .pipe(deploy())
 });
 
 gulp.task('default', () => gulp.start('build', 'test'));
