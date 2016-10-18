@@ -76,7 +76,22 @@ gulp.task('scripts:test', () => {
         .pipe(reload({stream: true}));
 });
 
-gulp.task('html', () => $.util.log('Fill in html task'));
+//gulp.task('html', () => $.util.log('Fill in html task'));
+gulp.task('html', ['scripts', 'styles'], function() {
+    //var assets = $.useref.assets({searchPath: ['.tmp', 'app', '.']});
+
+    return gulp.src('app/*.html')
+        .pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
+        .pipe($.if('*.js', $.uglify()))
+        .on('error', function(err) {
+            console.log(err);
+        })
+        .pipe($.if('*.css', $.csso()))
+        //.pipe(assets.restore())
+        //.pipe($.useref())
+        .pipe($.if('*.html', $.minifyHtml({conditionals: true, loose: true})))
+        .pipe(gulp.dest('dist'));
+});
 
 gulp.task('html:test', () => {
     var specs = fileset.sync('test/spec/**/*.js').map((file) => {
@@ -145,17 +160,21 @@ gulp.task('serve:test', ['html:test', 'scripts', 'scripts:test'], () => {
 });
 
 gulp.task('extras', () => {
-    return gulp.src([
+    var other = gulp.src([
         'app/*.*',
         '!app/*.html'
-    ], {
-        dot: true
-    }).pipe(gulp.dest('dist'));
+    ]).pipe(gulp.dest('dist'));
+
+    var data = gulp.src([
+        'app/data/*.*'
+    ]).pipe(gulp.dest('dist/data'));
+
+    return merge(other, data);
 });
 
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
-gulp.task('build', ['html', 'styles', 'scripts', 'extras'], () => {
+gulp.task('build', ['html', 'extras'], () => {
     $.util.log('Building', typeof gulp.start)
 });
 

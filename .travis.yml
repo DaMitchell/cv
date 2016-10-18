@@ -1,13 +1,15 @@
-language:
-    node_js
+language: node_js
 node_js:
     - 0.12
-
 before_script:
     - git config --global user.email "danmitchellster@gmail.com"
     - git config --global user.name "damitchell"
+    - git config credential.helper "store --file=.git/credentials"
+    - echo "https://${GH_TOKEN}:@github.com" > .git/credentials
     - npm install -g bower
     - bower install
-
 script:
     - gulp deploy
+env:
+    global:
+        secure: Mpll7jUVOSHbmO+E8VRZ1vacsXKHblds538XHZWPC7k4h1YevZuSBbhfEk7e18IrXAQoQe/n+rIKtMQFVsQHMVZ7Scu0tuuPucs+OpnwYe2hLchYNEKuJhHpcGeYjAvf0VoOnVgsQ2T97Va7oG4bpEHyegng54yMJGpeYDhd7wY=
