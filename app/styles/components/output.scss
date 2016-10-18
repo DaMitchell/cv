@@ -2,7 +2,7 @@
     min-height: $console-font-size * $console-line-height;
     line-height: $console-line-height;
     white-space: pre-wrap;
-    word-break: break-all;
+    //word-break: break-all;
     word-wrap: break-word;
 
     &.table {
@@ -50,4 +50,12 @@
 
 .white {
     color: $console-color-white;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.underline {
+    text-decoration: underline;
 }

@@ -44,7 +44,7 @@ class Exit extends Command {
         }
 
         containerParent.remove();
-        parentConsole.hierarchy.removeChild(api);
+        parentConsole.hierarchy.removeChild(this._console);
     }
 }
 

@@ -187,7 +187,9 @@ class Input extends BaseView {
         if (this._enabled) {
             if (!e.ctrlKey && !e.altKey && $.inArray(e.which, [91, 93]) < 0) {
                 //runLoop.defer('sync', this, 'updateCommand', String.fromCharCode(e.which));
-                this.updateCommand(String.fromCharCode(e.which));
+                if(this._commandInput.length < 20) {
+                    this.updateCommand(String.fromCharCode(e.which));
+                }
             }
         }
     }
@@ -243,7 +245,7 @@ class Input extends BaseView {
                 $(document).off('keypress', this._onKeyPressRef);
             }
         }
-        
+
         this._listener.stop_listening();
     }
 
@@ -285,7 +287,6 @@ class Input extends BaseView {
     Object.defineProperty(Input.prototype, prop.key, {
         set: function(value) {
             this._data[prop.key] = value;
-            //this.render();
             runLoop.deferOnce('render', this, 'render');
         },
         get: function() {

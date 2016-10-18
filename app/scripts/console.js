@@ -31,7 +31,7 @@ class Console {
 
         this.eventDispatcher = new EventDispatcher(this);
         this.hierarchy = new Hierarchy(parent);
-        //this.tracking = new Tracking(this);
+        this.tracking = new Tracking(this.eventDispatcher);
 
         if(this.options.commands) {
             this.addCommands(this.options.commands);
@@ -39,7 +39,6 @@ class Console {
 
         this.views = new Views(this.container, this.eventDispatcher, this.options.views || []);
         this.runner = new Runner(this.commands, this.eventDispatcher);
-        //this.runner = new Runner(this);
     }
 
     /**
@@ -85,8 +84,6 @@ class Console {
 
         this._started = true;
         this.eventDispatcher.trigger(Events.READY, data);
-
-        console.log(this.options.initOutput);
 
         this.options.initOutput.forEach((line) => this.eventDispatcher.trigger(Events.OUTPUT, {content: line}));
 

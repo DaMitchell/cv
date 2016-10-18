@@ -72,15 +72,7 @@ class Output extends BaseView {
         }));
     }
 
-    render() {
-        //requestAnimationFrame(() => {
-            //this._lines.forEach((line) => this.element.append(line));
-            //this._lines = [];
-        //});
-
-        //this.element.html(template(data));
-        //this.parent.scrollTop(this.parent[0].scrollHeight);
-    }
+    render(){}
 }
 
 export default Output;

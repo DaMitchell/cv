@@ -42,8 +42,8 @@ class Views {
 
     nanoScroller() {
         this.container.nanoScroller(nanoConfig);
-        setTimeout(() => this.element.scrollTop(this.element[0].scrollHeight), 0);
-        //this.element.animate({scrollTop: this.element[0].scrollHeight}, 100);
+        //setTimeout(() => this.element.scrollTop(this.element[0].scrollHeight), 0);
+        setTimeout(() => this.element.animate({scrollTop: this.element[0].scrollHeight}, 100), 0);
     }
 
     addViews(views) {
@@ -71,8 +71,6 @@ class Views {
             view.parent = this.element;
 
             this.element.append(view.element);
-            //runLoop.deferOnce('render', view, 'render');
-            //view.render();
         });
     }
 }
